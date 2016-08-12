@@ -15,3 +15,12 @@ OPENID_PROVIDERS = [
 	{'name': 'Flickr', 'url': 'http://www.flickr.com/<username>'},
 	{'name': 'MyOpenID', 'url': 'https://www.myopenid.com'}
 					]
+
+# mail server settings
+MAIL_SERVER = 'localhost'
+MAIL_PORT = 25
+MAIL_USERNAME = None
+MAIL_PASSWORD = None
+
+# admin list
+ADMINS = ['growberry.py@gmail.com']

@@ -114,7 +114,7 @@ def edit():
 		db.session.add(g.user)
 		db.session.commit()
 		flash('Your changes have been saved')
-		return redirect(url_for('edit'))
+		return redirect(url_for('index'))
 	else:
 		flash('something went wrong.  Try again')
 		form.nickname.data = g.user.nickname

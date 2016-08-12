@@ -40,7 +40,7 @@ def index():
 		},
 		{
 			'author':{'nickname': 'Sydney'},
-			'body':'I have a huge crush on Austin'
+			'body':'what crazy weather we have been having in Portland!'
 		},
 		{
 			'author':{'nickname':'Sarah'},
@@ -116,6 +116,7 @@ def edit():
 		flash('Your changes have been saved')
 		return redirect(url_for('edit'))
 	else:
+		flash('something went wrong.  Try again')
 		form.nickname.data = g.user.nickname
 		form.about_me.data = g.user.about_me
 	return render_template('edit.html', form =form)

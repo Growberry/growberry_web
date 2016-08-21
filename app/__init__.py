@@ -38,4 +38,4 @@ if not app.debug:
     app.logger.addHandler(file_handler)
     app.logger.info('growberry_web startup')
 
-jrom app import views, models
+from app import views, models

@@ -65,24 +65,24 @@ def login():
 
 @oid.after_login
 def after_login(resp):
-    if resp.email is None or resp.email == "":
-        flash('Invalid login. Please try again.')
-        return redirect(url_for('login'))
-    user = User.query.filter_by(email=resp.email).first()
-    if user is None:
-        nickname = resp.nickname
-        if nickname is None or nickname == "":
-            nickname = resp.email.split('@')[0]
+	if resp.email is None or resp.email == "":
+		flash('Invalid login. Please try again.')
+		return redirect(url_for('login'))
+	user = User.query.filter_by(email=resp.email).first()
+	if user is None:
+		nickname = resp.nickname
+		if nickname is None or nickname == "":
+			nickname = resp.email.split('@')[0]
 		nickname=User.make_unique_nickname(nickname)
-        user = User(nickname=nickname, email=resp.email)
-        db.session.add(user)
-        db.session.commit()
-    remember_me = False
-    if 'remember_me' in session:
-        remember_me = session['remember_me']
-        session.pop('remember_me', None)
-    login_user(user, remember = remember_me)
-    return redirect(request.args.get('next') or url_for('index'))
+		user = User(nickname=nickname, email=resp.email)
+		db.session.add(user)
+		db.session.commit()
+		remember_me = False
+	if 'remember_me' in session:
+		remember_me = session['remember_me']
+		session.pop('remember_me', None)
+	login_user(user, remember = remember_me)
+	return redirect(request.args.get('next') or url_for('index'))
 
 @app.route('/logout')
 def logout():
@@ -108,7 +108,7 @@ def user(nickname):
 @app.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit():
-	form = EditForm()
+	form = EditForm(g.user.nickname)
 	if form.validate_on_submit():
 		g.user.nickname = form.nickname.data
 		g.user.about_me = form.about_me.data

@@ -24,3 +24,6 @@ MAIL_PASSWORD = 'Temp123'
 
 # admin list
 ADMINS = ['growberry.py@gmail.com']
+
+# pagination
+POSTS_PER_PAGE = 4

@@ -89,5 +89,17 @@ class Post(db.Model):
 	def __repr__(self):
 		return '<Post %r>' % (self.body)
 
+class Grow(db.Model):
+	__searchable__ = ['variety']
+
+	id = db.Column(db.Integer, primary_key = True)
+	variety = db.Column(db.String(140))
+	startdate = db.Column(db.DateTime)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+	def __repr__(self):
+		return '<Post %r>' % (self.body)
+
+
 if enable_search:
 	whooshalchemy.whoosh_index(app, Post)

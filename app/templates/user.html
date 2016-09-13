@@ -18,6 +18,9 @@
         {% else %}
             <a href="{{url_for('unfollow', nickname=user.nickname)}}">Unfollow</a>
         {% endif %}
+        {% if user.id == g.user.id %}
+            <a href="{{url_for('settings')}}">Edit your settings</a>
+        {% endif %}
         </p>
     </div>
     {% for post in posts.items %}

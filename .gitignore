@@ -3,3 +3,6 @@
 
 #ignore temp files
 /tmp
+
+#ignore the virtual env
+/flask

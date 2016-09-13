@@ -26,6 +26,13 @@ class EditForm(Form):
 			return False
 		return True
 
+class EditSettings(Form):
+	variety = TextAreaField('variety', validators = [Length(min=0,max=140)])
+	def __init__(self, original_nickname, *args, **kwargs):
+		Form.__init__(self, *args, **kwargs)
+		self.original_nickname = original_nickname
+
+
 
 class PostForm(Form):
 	post = StringField('post', validators = [DataRequired()])

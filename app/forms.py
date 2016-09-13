@@ -33,7 +33,6 @@ class EditSettings(Form):
 		self.original_nickname = original_nickname
 
 
-
 class PostForm(Form):
 	post = StringField('post', validators = [DataRequired()])
 

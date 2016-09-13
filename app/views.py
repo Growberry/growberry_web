@@ -135,6 +135,12 @@ def settings():
 		form.variety.data = g.user.variety
 	return render_template('settings.html', form =form)
 
+@app.route('/settings/<nickname>', methods=['GET'])
+def sndsettings(nickname):
+    user = User.query.filter_by(nickname = nickname).first()
+    bucket_settings = str(user.variety)
+    return bucket_settings
+
 @app.route('/follow/<nickname>')
 @login_required
 def follow(nickname):

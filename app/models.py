@@ -18,8 +18,8 @@ class User(db.Model):
 	nickname = db.Column(db.String(64), index = True, unique = True)
 	email = db.Column(db.String(120), index = True, unique = True)
 	posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
+	grows = db.relationship('Grow', backref = 'grower', lazy = 'dynamic')
 	about_me = db.Column(db.String(140))
-	variety = db.Column(db.String(140))
 	last_seen = db.Column(db.DateTime)
 	followed = db.relationship('User',
 								secondary = followers,
@@ -91,16 +91,27 @@ class Post(db.Model):
 		return '<Post %r>' % (self.body)
 
 class Grow(db.Model):
-	__searchable__ = ['variety']
+	__searchable__ = ['plant']
 
 	id = db.Column(db.Integer, primary_key = True)
-	variety = db.Column(db.String(140))
+	name = db.Column(db.String(140))
+	plant = db.Column(db.String(140))
 	startdate = db.Column(db.DateTime)
+	settings = db.Column(db.String)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-	def __repr__(self):
-		return '<Post %r>' % (self.body)
+	#need some sort of function to json.dump befor I convert to a better database that can handle JSON/pickle objects
 
+	def __repr__(self):
+		return '<Grow %r>' % (self.name)
+
+class Readings(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	timestamp = db.Column(db.DateTime)
+	internal_temp = db.Column(db.String)
+	internal_humidity = db.Column(db.String)
+	pic_dir = db.Column(db.String)
+	grow_id = db.Column(db.Integer, db.ForeignKey('grow.id'))
 
 if enable_search:
 	whooshalchemy.whoosh_index(app, Post)

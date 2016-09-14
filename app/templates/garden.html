@@ -1,0 +1,41 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+    {% include 'flash.html' %}
+    <div class="well well-large" style="height: 140px;">
+        <div class="pull-right">
+            <img src="{{ user.avatar(128) }}" class="img-polaroid">
+        </div>
+        <h1>{{ user.nickname }}</h1>
+        {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+        {% if user.last_seen %}<p><em>Last seen on: {{ user.last_seen }}</em></p>{% endif %}
+        <p>Followers: {{ user.followers.count() - 1 }} | Following: {{ user.followed.count() - 1 }} |
+        {% if user.id == g.user.id %}
+            <a href="{{url_for('edit')}}">Edit your profile</a>
+        {% elif not g.user.is_following(user) %}
+            <a href="{{url_for('follow', nickname=user.nickname)}}">Follow</a>
+        {% else %}
+            <a href="{{url_for('unfollow', nickname=user.nickname)}}">Unfollow</a>
+        {% endif %}
+        {% if user.id == g.user.id %}
+            <a href="{{url_for('settings')}}">Edit your settings</a>
+        {% endif %}
+        </p>
+    </div>
+    {% for grow in grows.items %}
+        {% include 'grows.html' %}
+    {% endfor %}
+    <ul class="pager">
+        {% if grows.has_prev %}
+        <li class="previous"><a href="{{ url_for('user', nickname=user.nickname, page=grows.prev_num) }}">Newer grows</a></li>
+        {% else %}
+        <li class="previous disabled"><a href="#">Newer grows</a></li>
+        {% endif %}
+        {% if grows.has_next %}
+        <li class="next"><a href="{{ url_for('user', nickname=user.nickname, page=grows.next_num) }}">Older grows</a></li>
+        {% else %}
+        <li class="next disabled"><a href="#">Older grows</a></li>
+        {% endif %}
+    </ul>
+{% endblock %}

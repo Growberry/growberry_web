@@ -125,7 +125,11 @@ def edit():
 def settings():
 	form = EditSettings(g.user.nickname)
 	if form.validate_on_submit():
-		g.user.variety = form.variety.data
+		sun = {}
+		sun['sunrise']=form.sunrise.data
+		sun['daylength']=form.daylength.data
+		g.user.variety = sun
+		#g.user.variety = form.variety.data
 		db.session.add(g.user)
 		db.session.commit()
 		flash('Your changes have been saved')
@@ -135,11 +139,23 @@ def settings():
 		form.variety.data = g.user.variety
 	return render_template('settings.html', form =form)
 
+@app.route('/garden/<nickname>')
+@app.route('/garden/<nickname>/<int:page>')
+@login_required
+def garden(nickname, page =1):
+	user = User.query.filter_by(nickname=nickname).first()
+	if user == None:
+		flash('User %s not found.' %nickname)
+		return redirect(url_for('index'))
+	grows = g.user.grows.paginate(page, POSTS_PER_PAGE,False)
+	return render_template('garden.html', user=user,grows =grows)
+
+
 @app.route('/settings/<nickname>', methods=['GET'])
 def sndsettings(nickname):
-    user = User.query.filter_by(nickname = nickname).first()
-    bucket_settings = str(user.variety)
-    return bucket_settings
+	user = User.query.filter_by(nickname = nickname).first()
+	bucket_settings = str(user.variety)
+	return bucket_settings
 
 @app.route('/follow/<nickname>')
 @login_required

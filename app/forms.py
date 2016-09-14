@@ -28,6 +28,8 @@ class EditForm(Form):
 
 class EditSettings(Form):
 	variety = TextAreaField('variety', validators = [Length(min=0,max=140)])
+	sunrise = StringField('sunrise', validators=[Length(min=1,max=4)])
+	daylength = StringField('daylength', validators=[Length(min=1,max=100)])
 	def __init__(self, original_nickname, *args, **kwargs):
 		Form.__init__(self, *args, **kwargs)
 		self.original_nickname = original_nickname

@@ -1,8 +1,8 @@
 #ignore .pyc
 *.pyc
 
-#ignore temp files
-/tmp
-
 #ignore the virtual env
 /flask
+
+#ignore style stuff from pycharm
+.idea/*

@@ -94,7 +94,7 @@ class Grow(db.Model):
 	__searchable__ = ['plant']
 
 	id = db.Column(db.Integer, primary_key = True)
-	name = db.Column(db.String(140))
+	title = db.Column(db.String(140))
 	plant = db.Column(db.String(140))
 	startdate = db.Column(db.DateTime)
 	settings = db.Column(db.String)

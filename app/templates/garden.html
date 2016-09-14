@@ -10,23 +10,12 @@
         <h1>{{ user.nickname }}</h1>
         <p>These are your barrel gardens:</p>
         {% if user.id == g.user.id %}
-            <a href="{{url_for('settings')}}">Start new grow!</a>
+            <a href="{{url_for('addgrow')}}">Start new grow!</a>
         {% endif %}
         </p>
     </div>
     {% for grow in grows.items %}
-        {% include 'grows.html' %}
+        {% include 'garden_thumb.html' %}
     {% endfor %}
-    <ul class="pager">
-        {% if grows.has_prev %}
-        <li class="previous"><a href="{{ url_for('user', nickname=user.nickname, page=grows.prev_num) }}">Newer grows</a></li>
-        {% else %}
-        <li class="previous disabled"><a href="#">Newer grows</a></li>
-        {% endif %}
-        {% if grows.has_next %}
-        <li class="next"><a href="{{ url_for('user', nickname=user.nickname, page=grows.next_num) }}">Older grows</a></li>
-        {% else %}
-        <li class="next disabled"><a href="#">Older grows</a></li>
-        {% endif %}
-    </ul>
+
 {% endblock %}

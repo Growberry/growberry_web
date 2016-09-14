@@ -120,6 +120,23 @@ def edit():
 		form.about_me.data = g.user.about_me
 	return render_template('edit.html', form =form)
 
+@app.route('/addgrow', methods=['GET', 'POST'])
+@login_required
+def addgrow():
+	form = EditForm(g.user.nickname)
+	if form.validate_on_submit():
+		g.user.nickname = form.nickname.data
+		g.user.about_me = form.about_me.data
+		db.session.add(g.user)
+		db.session.commit()
+		flash('Your changes have been saved')
+		return redirect(url_for('index'))
+	else:
+		flash('something went wrong.  Try again')
+		form.nickname.data = g.user.nickname
+		form.about_me.data = g.user.about_me
+	return render_template('edit.html', form =form)
+
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():

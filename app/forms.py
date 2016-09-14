@@ -27,9 +27,12 @@ class EditForm(Form):
 		return True
 
 class EditSettings(Form):
+
+	title = TextAreaField('title', validators = [Length(min=0,max=140)])
+	is_active = BooleanField('is_active', default = True)
+	thumb = TextAreaField('thumb', validators = [Length(min=0,max=140)])
 	variety = TextAreaField('variety', validators = [Length(min=0,max=140)])
-	sunrise = StringField('sunrise', validators=[Length(min=1,max=4)])
-	daylength = StringField('daylength', validators=[Length(min=1,max=100)])
+	settings = TextAreaField('settings', validators = [Length(min=0)])
 	def __init__(self, original_nickname, *args, **kwargs):
 		Form.__init__(self, *args, **kwargs)
 		self.original_nickname = original_nickname

@@ -95,7 +95,7 @@ class Grow(db.Model):
 
 	id = db.Column(db.Integer, primary_key = True)
 	title = db.Column(db.String(140))
-	plant = db.Column(db.String(140))
+	variety = db.Column(db.String(140))
 	startdate = db.Column(db.DateTime)
 	settings = db.Column(db.String)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

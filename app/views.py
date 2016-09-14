@@ -123,19 +123,19 @@ def edit():
 @app.route('/addgrow', methods=['GET', 'POST'])
 @login_required
 def addgrow():
-	form = EditForm(g.user.nickname)
+	form = EditSettings(g.user.nickname)
 	if form.validate_on_submit():
-		g.user.nickname = form.nickname.data
-		g.user.about_me = form.about_me.data
-		db.session.add(g.user)
+		grow = Grow(title = form.title.data,
+					startdate = datetime.utcnow(),
+					grower = g.user,
+					thumb =form.thumb.data,
+					variety = form.variety.data,
+					settings = form.settings.data)
+		db.session.add(grow)
 		db.session.commit()
-		flash('Your changes have been saved')
-		return redirect(url_for('index'))
-	else:
-		flash('something went wrong.  Try again')
-		form.nickname.data = g.user.nickname
-		form.about_me.data = g.user.about_me
-	return render_template('edit.html', form =form)
+		flash('Your Grow has begun!')
+		return redirect(url_for('garden'))
+	return render_template('addgrow.html', form =form)
 
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required

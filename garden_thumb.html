@@ -4,6 +4,7 @@
         <td>
             <p><a href="{{ url_for('garden', nickname=grow.grower.nickname) }}">{{ grow.grower.nickname }}</a> grew on {{ grow.startdate }}:</p>
             <p><strong>{{ grow.plant }}</strong></p>
+            <li><a href="{{ url_for('grow', grow_id = grow.id) }}">{{grow.name}}</a></li>
         </td>
     </tr>
 </table>

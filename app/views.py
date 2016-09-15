@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, oid
 from .forms import LoginForm, EditForm, PostForm, SearchForm, CreateGrow
-from .models import User, Post
+from .models import User, Post, Grow
 from .emails import follower_notification
 from datetime import datetime
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
@@ -125,16 +125,20 @@ def edit():
 def addgrow():
 	form = CreateGrow()
 	if form.validate_on_submit():
+		active = 0
+		if form.is_active.data:
+			active = 1
 		grow = Grow(title = form.title.data,
 					startdate = datetime.utcnow(),
 					grower = g.user,
 					thumb =form.thumb.data,
 					variety = form.variety.data,
-					settings = form.settings.data)
+					settings = form.settings.data,
+					is_active = active)
 		db.session.add(grow)
 		db.session.commit()
 		flash('Your Grow has begun!')
-		return redirect(url_for('garden'))
+		return redirect(url_for('garden', nickname = g.user.nickname ))
 	else:
 		flash('Something isnt right.  Try that again.')
 	return render_template('addgrow.html', form =form)

@@ -93,16 +93,18 @@ class Post(db.Model):
 class Grow(db.Model):
 
 	id = db.Column(db.Integer, primary_key = True)
+	is_active = db.Column(db.Integer)
 	title = db.Column(db.String(140))
 	variety = db.Column(db.String(140))
 	startdate = db.Column(db.DateTime)
 	settings = db.Column(db.String)
+	thumb = db.Column(db.String)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 	#need some sort of function to json.dump befor I convert to a better database that can handle JSON/pickle objects
 
 	def __repr__(self):
-		return '<Grow %r>' % (self.name)
+		return '<Grow %r>' % (self.title)
 
 class Readings(db.Model):
 	id = db.Column(db.Integer, primary_key = True)

@@ -37,7 +37,6 @@ class CreateGrow(Form):
 		Form.__init__(self, *args, **kwargs)
 
 
-
 class PostForm(Form):
 	post = StringField('post', validators = [DataRequired()])
 

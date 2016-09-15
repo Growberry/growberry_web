@@ -10,15 +10,49 @@
             <div class="control-group{% if form.title.errors %} error{% endif %}">
                 <label class="control-label" for="title">Descriptive title of your new grow:</label>
                 <div class="controls">
-                    {{ form.variety(cols=64, rows=4, class="span4") }}
+                    {{ form.title(cols=64, rows=1, class="span4") }}
+                    {% for error in form.title.errors %}
+                        <span class="help-inline">[{{ error }}]</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="control-group{% if form.title.errors %} error{% endif %}">
+                <label class="control-label" for="variety">What variety are you growing?</label>
+                <div class="controls">
+                    {{ form.variety(cols=24, rows=1, class="span4") }}
                     {% for error in form.variety.errors %}
+                        <span class="help-inline">[{{ error }}]</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="control-group{% if form.title.errors %} error{% endif %}">
+                <label class="control-label" for="settings">Enter settings in JSON format.</label>
+                <div class="controls">
+                    {{ form.settings(cols=64, rows=4, class="span4") }}
+                    {% for error in form.settings.errors %}
+                        <span class="help-inline">[{{ error }}]</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="control-group{% if form.thumb.errors %} error{% endif %}">
+                <label class="control-label" for="thumb"> location of thumbnail.hml </label>
+                <div class="controls">
+                    {{ form.thumb(cols=24, rows=1, class="span4") }}
+                    {% for error in form.thumb.errors %}
                         <span class="help-inline">[{{ error }}]</span><br>
                     {% endfor %}
                 </div>
             </div>
             <div class="control-group">
                 <div class="controls">
-                    <input class="btn btn-primary" type="start growing!" value="Save Changes">
+                    <label class="checkbox" for="is_active">
+                        {{ form.is_active }} Active grow?
+                    </label>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input class="btn btn-primary" type="submit!" value="Start growing!">
                 </div>
             </div>
         </form>

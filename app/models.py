@@ -91,7 +91,6 @@ class Post(db.Model):
 		return '<Post %r>' % (self.body)
 
 class Grow(db.Model):
-	__searchable__ = ['plant']
 
 	id = db.Column(db.Integer, primary_key = True)
 	title = db.Column(db.String(140))

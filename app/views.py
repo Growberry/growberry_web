@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, oid
-from .forms import LoginForm, EditForm, PostForm, SearchForm, EditSettings
+from .forms import LoginForm, EditForm, PostForm, SearchForm, CreateGrow
 from .models import User, Post
 from .emails import follower_notification
 from datetime import datetime
@@ -123,7 +123,7 @@ def edit():
 @app.route('/addgrow', methods=['GET', 'POST'])
 @login_required
 def addgrow():
-	form = EditSettings(g.user.nickname)
+	form = CreateGrow()
 	if form.validate_on_submit():
 		grow = Grow(title = form.title.data,
 					startdate = datetime.utcnow(),
@@ -135,26 +135,10 @@ def addgrow():
 		db.session.commit()
 		flash('Your Grow has begun!')
 		return redirect(url_for('garden'))
+	else:
+		flash('Something isnt right.  Try that again.')
 	return render_template('addgrow.html', form =form)
 
-@app.route('/settings', methods=['GET', 'POST'])
-@login_required
-def settings():
-	form = EditSettings(g.user.nickname)
-	if form.validate_on_submit():
-		sun = {}
-		sun['sunrise']=form.sunrise.data
-		sun['daylength']=form.daylength.data
-		g.user.variety = sun
-		#g.user.variety = form.variety.data
-		db.session.add(g.user)
-		db.session.commit()
-		flash('Your changes have been saved')
-		return redirect(url_for('index'))
-	else:
-		flash('something went wrong.  Try again')
-		form.variety.data = g.user.variety
-	return render_template('settings.html', form =form)
 
 @app.route('/garden/<nickname>')
 @app.route('/garden/<nickname>/<int:page>')
@@ -167,12 +151,6 @@ def garden(nickname, page =1):
 	grows = g.user.grows.paginate(page, POSTS_PER_PAGE,False)
 	return render_template('garden.html', user=user,grows =grows)
 
-
-@app.route('/settings/<nickname>', methods=['GET'])
-def sndsettings(nickname):
-	user = User.query.filter_by(nickname = nickname).first()
-	bucket_settings = str(user.variety)
-	return bucket_settings
 
 @app.route('/follow/<nickname>')
 @login_required

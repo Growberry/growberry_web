@@ -26,16 +26,16 @@ class EditForm(Form):
 			return False
 		return True
 
-class EditSettings(Form):
+class CreateGrow(Form):
 
-	title = TextAreaField('title', validators = [Length(min=0,max=140)])
+	title = StringField('title', validators = [Length(min=0,max=140)])
 	is_active = BooleanField('is_active', default = True)
 	thumb = TextAreaField('thumb', validators = [Length(min=0,max=140)])
 	variety = TextAreaField('variety', validators = [Length(min=0,max=140)])
 	settings = TextAreaField('settings', validators = [Length(min=0)])
-	def __init__(self, original_nickname, *args, **kwargs):
+	def __init__(self, *args, **kwargs):
 		Form.__init__(self, *args, **kwargs)
-		self.original_nickname = original_nickname
+
 
 
 class PostForm(Form):

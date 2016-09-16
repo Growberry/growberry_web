@@ -3,11 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1414166c-86f8-4f4e-93fc-c526d2261693" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.db" afterPath="$PROJECT_DIR$/app.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/forms.py" afterPath="$PROJECT_DIR$/app/forms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models.py" afterPath="$PROJECT_DIR$/app/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/addgrow.html" afterPath="$PROJECT_DIR$/app/templates/addgrow.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/garden_thumb.html" afterPath="$PROJECT_DIR$/app/templates/garden_thumb.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views.py" afterPath="$PROJECT_DIR$/app/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tmp/microblog.log" afterPath="$PROJECT_DIR$/tmp/microblog.log" />
     </list>
@@ -57,12 +52,24 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.07188498">
-              <caret line="3" column="72" selection-start-line="3" selection-start-column="72" selection-end-line="3" selection-end-column="72" />
+            <state vertical-scroll-proportion="0.85623">
+              <caret line="214" column="31" selection-start-line="214" selection-start-column="31" selection-end-line="214" selection-end-column="31" />
               <folding>
-                <element signature="e#1610#1983#0" expanded="false" />
-                <element signature="e#6231#6388#0" expanded="false" />
-                <element signature="e#6472#6634#0" expanded="false" />
+                <element signature="e#0#89#0" expanded="true" />
+                <element signature="e#782#821#0" expanded="false" />
+                <element signature="e#874#936#0" expanded="false" />
+                <element signature="e#1126#1548#0" expanded="false" />
+                <element signature="e#1629#2002#0" expanded="false" />
+                <element signature="e#2045#2816#0" expanded="false" />
+                <element signature="e#2855#2903#0" expanded="false" />
+                <element signature="e#3023#3308#0" expanded="false" />
+                <element signature="e#3384#3826#0" expanded="false" />
+                <element signature="e#3908#4484#0" expanded="false" />
+                <element signature="e#4611#4881#0" expanded="false" />
+                <element signature="e#4955#5536#0" expanded="false" />
+                <element signature="e#5614#6171#0" expanded="false" />
+                <element signature="e#6247#6404#0" expanded="false" />
+                <element signature="e#6488#6650#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -439,7 +446,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -469,9 +476,21 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#1610#1983#0" expanded="false" />
-            <element signature="e#6231#6388#0" expanded="false" />
-            <element signature="e#6472#6634#0" expanded="false" />
+            <element signature="e#0#89#0" expanded="true" />
+            <element signature="e#782#821#0" expanded="false" />
+            <element signature="e#874#936#0" expanded="false" />
+            <element signature="e#1126#1548#0" expanded="false" />
+            <element signature="e#1629#2002#0" expanded="false" />
+            <element signature="e#2045#2816#0" expanded="false" />
+            <element signature="e#2855#2903#0" expanded="false" />
+            <element signature="e#3023#3308#0" expanded="false" />
+            <element signature="e#3384#3826#0" expanded="false" />
+            <element signature="e#3908#4484#0" expanded="false" />
+            <element signature="e#4611#4881#0" expanded="false" />
+            <element signature="e#4955#5536#0" expanded="false" />
+            <element signature="e#5614#6171#0" expanded="false" />
+            <element signature="e#6247#6404#0" expanded="false" />
+            <element signature="e#6488#6650#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -661,12 +680,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.07188498">
-          <caret line="3" column="72" selection-start-line="3" selection-start-column="72" selection-end-line="3" selection-end-column="72" />
+        <state vertical-scroll-proportion="0.85623">
+          <caret line="214" column="31" selection-start-line="214" selection-start-column="31" selection-end-line="214" selection-end-column="31" />
           <folding>
-            <element signature="e#1610#1983#0" expanded="false" />
-            <element signature="e#6231#6388#0" expanded="false" />
-            <element signature="e#6472#6634#0" expanded="false" />
+            <element signature="e#0#89#0" expanded="true" />
+            <element signature="e#782#821#0" expanded="false" />
+            <element signature="e#874#936#0" expanded="false" />
+            <element signature="e#1126#1548#0" expanded="false" />
+            <element signature="e#1629#2002#0" expanded="false" />
+            <element signature="e#2045#2816#0" expanded="false" />
+            <element signature="e#2855#2903#0" expanded="false" />
+            <element signature="e#3023#3308#0" expanded="false" />
+            <element signature="e#3384#3826#0" expanded="false" />
+            <element signature="e#3908#4484#0" expanded="false" />
+            <element signature="e#4611#4881#0" expanded="false" />
+            <element signature="e#4955#5536#0" expanded="false" />
+            <element signature="e#5614#6171#0" expanded="false" />
+            <element signature="e#6247#6404#0" expanded="false" />
+            <element signature="e#6488#6650#0" expanded="false" />
           </folding>
         </state>
       </provider>

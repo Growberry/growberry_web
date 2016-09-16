@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, session, url_for, request, g
+from flask import render_template, flash, redirect, session, url_for, request, g, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, oid
 from .forms import LoginForm, EditForm, PostForm, SearchForm, CreateGrow
@@ -6,12 +6,11 @@ from .models import User, Post, Grow
 from .emails import follower_notification
 from datetime import datetime
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
-
+import json
 
 @lm.user_loader
 def load_user(id):
 	return User.query.get(int(id))
-
 
 @app.before_request
 def before_request():
@@ -89,7 +88,6 @@ def logout():
 	logout_user()
 	return redirect(url_for('index'))
 
-
 @app.route('/user/<nickname>')
 @app.route('/user/<nickname>/<int:page>')
 @login_required
@@ -143,7 +141,6 @@ def addgrow():
 		flash('Something isnt right.  Try that again.')
 	return render_template('addgrow.html', form =form)
 
-
 @app.route('/garden/<nickname>')
 @app.route('/garden/<nickname>/<int:page>')
 @login_required
@@ -154,7 +151,6 @@ def garden(nickname, page =1):
 		return redirect(url_for('index'))
 	grows = g.user.grows.paginate(page, POSTS_PER_PAGE,False)
 	return render_template('garden.html', user=user,grows =grows)
-
 
 @app.route('/follow/<nickname>')
 @login_required
@@ -209,3 +205,11 @@ def search_results(query):
 	return render_template('search_results.html',
 							query = query,
 							results = results)
+
+fake_settings = [{'sunrise': '0600', 'daylength': 12, 'set_temp':25}]
+
+@app.route('/get_settings/<grow_id>', methods =['GET'])
+def get_settings(grow_id):
+	sttgs = Grow.query.get(int(grow_id)).settings
+	sttgs_dict = json.loads(sttgs)
+	return jsonify({'settings': sttgs_dict})

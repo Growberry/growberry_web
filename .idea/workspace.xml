@@ -2,22 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1414166c-86f8-4f4e-93fc-c526d2261693" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/search.db/Post/MAIN_ygbubmhncvvns9hv.seg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/search.db/Post/_MAIN_1.toc" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/search.db/Post/MAIN_nneiy241bv96nlz9.seg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/search.db/Post/MAIN_ue29sviklv3o8kss.seg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/search.db/Post/MAIN_uh5exmnog1e2e08h.seg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/search.db/Post/MAIN_ycjpqvz9kfogka2k.seg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/search.db/Post/_MAIN_13.toc" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.db" afterPath="$PROJECT_DIR$/app.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test.db" afterPath="$PROJECT_DIR$/test.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/__init__.py" afterPath="$PROJECT_DIR$/app/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/forms.py" afterPath="$PROJECT_DIR$/app/forms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models.py" afterPath="$PROJECT_DIR$/app/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/base.html" afterPath="$PROJECT_DIR$/app/templates/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/garden.html" afterPath="$PROJECT_DIR$/app/templates/garden.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/garden_thumb.html" afterPath="$PROJECT_DIR$/app/templates/garden_thumb.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/post.html" afterPath="$PROJECT_DIR$/app/templates/post.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/user.html" afterPath="$PROJECT_DIR$/app/templates/user.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views.py" afterPath="$PROJECT_DIR$/app/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests.py" afterPath="$PROJECT_DIR$/tests.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tmp/microblog.log" afterPath="$PROJECT_DIR$/tmp/microblog.log" />
     </list>
     <ignored path="growberry_web.iws" />
@@ -54,33 +45,34 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="12.777778">
+            <state vertical-scroll-proportion="15.277778">
               <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.0925927">
-              <caret line="212" column="10" selection-start-line="212" selection-start-column="10" selection-end-line="212" selection-end-column="10" />
+            <state vertical-scroll-proportion="0.08396947">
+              <caret line="99" column="29" selection-start-line="99" selection-start-column="29" selection-end-line="99" selection-end-column="29" />
               <folding>
                 <element signature="e#0#89#0" expanded="true" />
+                <element signature="e#561#728#0" expanded="false" />
                 <element signature="e#782#821#0" expanded="false" />
                 <element signature="e#874#936#0" expanded="false" />
                 <element signature="e#1126#1548#0" expanded="false" />
                 <element signature="e#1629#2002#0" expanded="false" />
+                <element signature="e#2045#2864#0" expanded="false" />
                 <element signature="e#2903#2951#0" expanded="false" />
-                <element signature="e#3071#3356#0" expanded="false" />
-                <element signature="e#3432#3874#0" expanded="false" />
-                <element signature="e#3956#4532#0" expanded="false" />
-                <element signature="e#4659#4961#0" expanded="false" />
-                <element signature="e#5035#5616#0" expanded="false" />
-                <element signature="e#5694#6251#0" expanded="false" />
-                <element signature="e#6327#6484#0" expanded="false" />
-                <element signature="e#6568#6730#0" expanded="false" />
+                <element signature="e#3464#3906#0" expanded="false" />
+                <element signature="e#3988#4564#0" expanded="false" />
+                <element signature="e#5067#5648#0" expanded="false" />
+                <element signature="e#5726#6283#0" expanded="false" />
+                <element signature="e#6359#6516#0" expanded="false" />
+                <element signature="e#6600#6762#0" expanded="false" />
+                <element signature="e#6828#7176#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -91,16 +83,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="118" column="0" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.35714287">
-              <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -185,10 +167,10 @@
         <option value="$PROJECT_DIR$/app/__init__.py" />
         <option value="$PROJECT_DIR$/app/forms.py" />
         <option value="$PROJECT_DIR$/app/templates/post.html" />
-        <option value="$PROJECT_DIR$/app/views.py" />
         <option value="$PROJECT_DIR$/app/models.py" />
         <option value="$PROJECT_DIR$/tests.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/app/views.py" />
       </list>
     </option>
   </component>
@@ -517,19 +499,20 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#89#0" expanded="true" />
+            <element signature="e#561#728#0" expanded="false" />
             <element signature="e#782#821#0" expanded="false" />
             <element signature="e#874#936#0" expanded="false" />
             <element signature="e#1126#1548#0" expanded="false" />
             <element signature="e#1629#2002#0" expanded="false" />
+            <element signature="e#2045#2864#0" expanded="false" />
             <element signature="e#2903#2951#0" expanded="false" />
-            <element signature="e#3071#3356#0" expanded="false" />
-            <element signature="e#3432#3874#0" expanded="false" />
-            <element signature="e#3956#4532#0" expanded="false" />
-            <element signature="e#4659#4961#0" expanded="false" />
-            <element signature="e#5035#5616#0" expanded="false" />
-            <element signature="e#5694#6251#0" expanded="false" />
-            <element signature="e#6327#6484#0" expanded="false" />
-            <element signature="e#6568#6730#0" expanded="false" />
+            <element signature="e#3464#3906#0" expanded="false" />
+            <element signature="e#3988#4564#0" expanded="false" />
+            <element signature="e#5067#5648#0" expanded="false" />
+            <element signature="e#5726#6283#0" expanded="false" />
+            <element signature="e#6359#6516#0" expanded="false" />
+            <element signature="e#6600#6762#0" expanded="false" />
+            <element signature="e#6828#7176#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -699,33 +682,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views.py">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.0925927">
-          <caret line="212" column="10" selection-start-line="212" selection-start-column="10" selection-end-line="212" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#89#0" expanded="true" />
-            <element signature="e#782#821#0" expanded="false" />
-            <element signature="e#874#936#0" expanded="false" />
-            <element signature="e#1126#1548#0" expanded="false" />
-            <element signature="e#1629#2002#0" expanded="false" />
-            <element signature="e#2903#2951#0" expanded="false" />
-            <element signature="e#3071#3356#0" expanded="false" />
-            <element signature="e#3432#3874#0" expanded="false" />
-            <element signature="e#3956#4532#0" expanded="false" />
-            <element signature="e#4659#4961#0" expanded="false" />
-            <element signature="e#5035#5616#0" expanded="false" />
-            <element signature="e#5694#6251#0" expanded="false" />
-            <element signature="e#6327#6484#0" expanded="false" />
-            <element signature="e#6568#6730#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="12.777778">
-          <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
+        <state vertical-scroll-proportion="0.35714287">
+          <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
           <folding />
         </state>
       </provider>
@@ -738,11 +698,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/app/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35714287">
-          <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+        <state vertical-scroll-proportion="15.277778">
+          <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.08396947">
+          <caret line="99" column="29" selection-start-line="99" selection-start-column="29" selection-end-line="99" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#89#0" expanded="true" />
+            <element signature="e#561#728#0" expanded="false" />
+            <element signature="e#782#821#0" expanded="false" />
+            <element signature="e#874#936#0" expanded="false" />
+            <element signature="e#1126#1548#0" expanded="false" />
+            <element signature="e#1629#2002#0" expanded="false" />
+            <element signature="e#2045#2864#0" expanded="false" />
+            <element signature="e#2903#2951#0" expanded="false" />
+            <element signature="e#3464#3906#0" expanded="false" />
+            <element signature="e#3988#4564#0" expanded="false" />
+            <element signature="e#5067#5648#0" expanded="false" />
+            <element signature="e#5726#6283#0" expanded="false" />
+            <element signature="e#6359#6516#0" expanded="false" />
+            <element signature="e#6600#6762#0" expanded="false" />
+            <element signature="e#6828#7176#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

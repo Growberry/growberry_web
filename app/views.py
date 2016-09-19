@@ -69,6 +69,7 @@ def after_login(resp):
 		nickname = resp.nickname
 		if nickname is None or nickname == "":
 			nickname = resp.email.split('@')[0]
+		nickname = User.make_valid_nickname(nickname)
 		nickname=User.make_unique_nickname(nickname)
 		user = User(nickname=nickname, email=resp.email)
 		db.session.add(user)
@@ -149,7 +150,7 @@ def garden(nickname, page =1):
 	if user == None:
 		flash('User %s not found.' %nickname)
 		return redirect(url_for('index'))
-	grows = g.user.grows.paginate(page, POSTS_PER_PAGE,False)
+	grows = g.user.grows.order_by(Grow.startdate.desc()).paginate(page, POSTS_PER_PAGE,False)
 	return render_template('garden.html', user=user,grows =grows)
 
 @app.route('/follow/<nickname>')
@@ -205,6 +206,23 @@ def search_results(query):
 	return render_template('search_results.html',
 							query = query,
 							results = results)
+
+@app.route('/delete/<int:id>')
+@login_required
+def delete(id):
+	post = Post.query.get(id)
+	if post == None:
+		flash('Post not found.')
+		return redirect(url_for('index'))
+	if post.author.id != g.user.id:
+		flash('You can not delete a post by another user.')
+		return redirect(url_for('index'))
+	db.session.delete(post)
+	db.session.commit()
+	flash('Your post has been deleted.')
+	return redirect(url_for('index'))
+	
+
 
 fake_settings = [{'sunrise': '0600', 'daylength': 12, 'set_temp':25}]
 

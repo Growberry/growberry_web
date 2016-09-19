@@ -2,7 +2,7 @@
     <tr>
         <td width="70px"><a href="{{ url_for('garden', nickname=grow.grower.nickname) }}"><img src="{{ grow.grower.avatar(70) }}" /></a></td>
         <td>
-            <p><a href="{{ url_for('garden', nickname=grow.grower.nickname) }}">{{ grow.grower.nickname }}</a> grew on {{ grow.startdate }}:</p>
+            <p><a href="{{ url_for('garden', nickname=grow.grower.nickname) }}">{{ grow.grower.nickname }}</a> Started growing {{ grow.variety }}  {{ momentjs(grow.startdate).fromNow() }}:</p>
             <p><strong>{{ grow.title }}</strong></p>
             <li><a href="{{ url_for('user', nickname=grow.grower.nickname) }}">change this link to go to the grow.html</a></li>
         </td>

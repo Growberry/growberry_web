@@ -1,6 +1,7 @@
 from app import db, app
 from hashlib import md5
 import sys
+import re
 
 if sys.version_info >= (3,0):
 	enable_search = False
@@ -38,6 +39,10 @@ class User(db.Model):
 				break
 			version += 1
 		return new_nickname
+
+	@staticmethod
+	def make_valid_nickname(nickname):
+		return re.sub('[^a-zA-Z0-9_\.]', '', nickname)
 
 	@property
 	def is_authenticated(self):

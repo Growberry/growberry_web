@@ -6,3 +6,6 @@
 
 #ignore style stuff from pycharm
 .idea/*
+
+#ignore tmp/nonces/
+tmp/nonces/

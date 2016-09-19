@@ -37,6 +37,9 @@ class TestCase(unittest.TestCase):
 		assert nickname2 != 'john'
 		assert nickname2 != nickname
 
+	def test_make_valid_nickname(self):
+		User.make_valid_nickname('invalid-nickname')
+
 	def test_follow(self):
 		u1 = User(nickname = 'john', email = 'john@example.com')
 		u2 = User(nickname = 'susan', email = 'susan@example.com')
@@ -108,7 +111,22 @@ class TestCase(unittest.TestCase):
 		assert f1 == [p4, p2, p1]	
 		assert f2 == [p3, p2]	
 		assert f3 == [p4, p3]	
-		assert f4 == [p4]	
+		assert f4 == [p4]
+
+	def test_delete_post(self):
+		# create a user and a post
+		u = User(nickname='john', email='john@example.com')
+		p = Post(body='test post', author=u, timestamp=datetime.utcnow())
+		db.session.add(u)
+		db.session.add(p)
+		db.session.commit()
+		# query the post and destroy the session
+		p = Post.query.get(1)
+		db.session.remove()
+		# delete the post using a new session
+		db.session = db.create_scoped_session()
+		db.session.delete(p)
+		db.session.commit()
 	
 		
 if __name__ == '__main__':

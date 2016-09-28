@@ -2,7 +2,7 @@
 *.pyc
 
 #ignore the virtual env
-/flask
+/flask/
 
 #ignore style stuff from pycharm
 .idea/*

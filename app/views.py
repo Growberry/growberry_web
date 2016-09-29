@@ -229,5 +229,6 @@ fake_settings = [{'sunrise': '0600', 'daylength': 12, 'set_temp':25}]
 @app.route('/get_settings/<grow_id>', methods =['GET'])
 def get_settings(grow_id):
 	sttgs = Grow.query.get(int(grow_id)).settings
-	sttgs_dict = json.loads(sttgs)
-	return jsonify({'settings': sttgs_dict})
+	#sttgs_dict = json.loads(sttgs)
+	#return jsonify({'settings': sttgs_dict})
+	return sttgs

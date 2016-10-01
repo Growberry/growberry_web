@@ -1,8 +1,8 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, jsonify
-from flask_login import login_user, logout_user, current_user, login_required
+from flask_login import login_user, logout_user, current_user, login_required, abort
 from app import app, db, lm, oid
 from .forms import LoginForm, EditForm, PostForm, SearchForm, CreateGrow
-from .models import User, Post, Grow
+from .models import User, Post, Grow, Reading
 from .emails import follower_notification
 from datetime import datetime
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
@@ -232,3 +232,59 @@ def get_settings(grow_id):
 	#sttgs_dict = json.loads(sttgs)
 	#return jsonify({'settings': sttgs_dict})
 	return sttgs
+
+
+@app.route('/autopost/<user_id>', methods =['POST'])
+def autopost(user_id):
+	if not request.json or not 'post' in request.json:
+		abort(400)
+	user = User.query.get(int(user_id))
+	body = request.json['post']
+	post = Post(body = body, timestamp = datetime.utcnow(), author = user)
+	db.session.add(post)
+	db.session.commit()
+	return jsonify({'body' : str(post.body),'author' : str(user.nickname)}), 201
+
+
+@app.route('/todo/api/v1.0/tasks', methods=['POST'])
+def create_task():
+    if not request.json or not 'title' in request.json:
+        abort(400)
+    task = {
+        'id': 1111,
+        'title': request.json['title'],
+        'description': request.json.get('description', ""),
+        'done': False
+    }
+
+    return jsonify({'task': task}), 201
+
+@app.route('/echo', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
+def api_echo():
+    if request.method == 'GET':
+        return "ECHO: GET\n"
+
+    elif request.method == 'POST':
+        return "ECHO: POST\n"
+
+    elif request.method == 'PATCH':
+        return "ECHO: PACTH\n"
+
+    elif request.method == 'PUT':
+        return "ECHO: PUT\n"
+
+    elif request.method == 'DELETE':
+        return "ECHO: DELETE"
+
+@app.route('/reading/<grow_id>', methods =['POST'])
+def reading(grow_id):
+	if not request.json:
+		abort(400)
+	reading = Reading(timestamp = datetime.utcnow(),
+					  internal_temp = request.json['internal_temp'],
+					  internal_humidity = request.json['internal_humidity'],
+					  pic_dir = request.json['pic_dir'],
+					  grow_id = int(grow_id))
+	db.session.add(reading)
+	db.session.commit()
+	return str(reading.id), 201

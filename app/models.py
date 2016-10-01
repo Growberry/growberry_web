@@ -111,7 +111,7 @@ class Grow(db.Model):
 	def __repr__(self):
 		return '<Grow %r>' % (self.title)
 
-class Readings(db.Model):
+class Reading(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	timestamp = db.Column(db.DateTime)
 	internal_temp = db.Column(db.String)

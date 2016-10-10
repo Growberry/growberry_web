@@ -9,4 +9,5 @@ It will be modified as I move on to work more specifically for the control, and 
 To start in development pi-server:
 
 cd /home/nimrod337/growberry_web/
+
 flask/bin/gunicorn --bind 0.0.0.0:8000 wsgi:app

@@ -8,6 +8,7 @@ from datetime import datetime
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
 import json
 
+
 @lm.user_loader
 def load_user(id):
 	return User.query.get(int(id))
@@ -228,10 +229,12 @@ fake_settings = [{'sunrise': '0600', 'daylength': 12, 'set_temp':25}]
 
 @app.route('/get_settings/<grow_id>', methods =['GET'])
 def get_settings(grow_id):
+	"""returns the settings for the specified grow"""
 	sttgs = Grow.query.get(int(grow_id)).settings
-	#sttgs_dict = json.loads(sttgs)
-	#return jsonify({'settings': sttgs_dict})
-	return sttgs
+	#seems that it doesn't matter at all if you just return the string/unicode or jsonify it first.
+	#only difference is the requests.header content type changes from application/json to text/html
+	return jsonify(json.loads(sttgs))
+	#return sttgs
 
 
 @app.route('/autopost/<user_id>', methods =['POST'])

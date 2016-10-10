@@ -104,6 +104,7 @@ class Grow(db.Model):
 	startdate = db.Column(db.DateTime)
 	settings = db.Column(db.String)
 	thumb = db.Column(db.String)
+	readings = db.relationship('Reading', backref='grower', lazy='dynamic')
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 	#need some sort of function to json.dump befor I convert to a better database that can handle JSON/pickle objects

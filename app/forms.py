@@ -1,6 +1,6 @@
 from flask_wtf import Form
-from wtforms import StringField, BooleanField, TextAreaField
-from wtforms.validators import DataRequired, Length
+from wtforms import StringField, BooleanField, TextAreaField, IntegerField, FloatField
+from wtforms.validators import DataRequired, Length, NumberRange
 from app.models import User
 
 class LoginForm(Form):
@@ -38,6 +38,12 @@ class CreateGrow(Form):
 	def __init__(self, *args, **kwargs):
 		Form.__init__(self, *args, **kwargs)
 
+class GrowSettings(Form):
+	sunrise = StringField('sunrise', validators=[Length(min=4,max=4,message = '(HHMM) use only 4 numbers. No spaces or slashes')])
+	daylength = IntegerField('daylength', validators = [NumberRange(min=0, max=24, message='enter only numbers between 0-24')])
+	settemp = StringField('settemp', default= "25")
+	def __init__(self, *args, **kwargs):
+		Form.__init__(self, *args, **kwargs)
 
 class PostForm(Form):
 	post = StringField('post', validators = [DataRequired()])

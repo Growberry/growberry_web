@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, jsonify
 from flask_login import login_user, logout_user, current_user, login_required, abort
 from app import app, db, lm, oid
-from .forms import LoginForm, EditForm, PostForm, SearchForm, CreateGrow
+from .forms import LoginForm, EditForm, PostForm, SearchForm, CreateGrow, GrowSettings
 from .models import User, Post, Grow, Reading
 from .emails import follower_notification
 from datetime import datetime
@@ -154,6 +154,46 @@ def garden(nickname, page =1):
 	grows = g.user.grows.order_by(Grow.startdate.desc()).paginate(page, POSTS_PER_PAGE,False)
 	return render_template('garden.html', user=user,grows =grows)
 
+@app.route('/grow/<int:grow_id>')
+@app.route('/grow/<int:grow_id>/<int:page>')
+@login_required
+def grow(grow_id, page =1):
+	grow = Grow.query.get(int(grow_id))
+	grower = User.query.get(grow.user_id)
+	# grow_title = Grow.query.get(int(grow_id)).title
+	# grow_settings = json.loads(Grow.query.get(int(grow_id)).settings)
+	readingspast24 = grow.readings.order_by(Reading.timestamp.desc()).paginate(page, 12, False)
+	return render_template('grow.html',
+						   title=grow.title,
+						   user = g.user,
+						   grow=grow,
+						   grower =grower,
+						   readings = readingspast24)
+
+@app.route('/settings/<int:grow_id>',methods=['GET', 'POST'])
+@login_required
+def settings(grow_id):
+	form = GrowSettings()
+	# myForm.display.default = 'ONE'
+	# myForm.process()  # process choices & default
+	grow = Grow.query.get(int(grow_id))
+	try:
+		settings = json.loads(grow.settings)
+	except:
+		settings = {}
+	if form.validate_on_submit():
+		settings['sunrise'] = form.sunrise.data
+		settings['daylength'] = form.daylength.data
+		settings['settemp'] = form.settemp.data
+		grow.settings = json.dumps(settings)
+		db.session.add(grow)
+		db.session.commit()
+		flash('Settings have been updated')
+		return redirect(url_for('garden', nickname=g.user.nickname))
+	else:
+		flash('Something isnt right.  Try that again.')
+	return render_template('settings.html', form = form, settings = settings)
+
 @app.route('/follow/<nickname>')
 @login_required
 def follow(nickname):
@@ -222,8 +262,6 @@ def delete(id):
 	db.session.commit()
 	flash('Your post has been deleted.')
 	return redirect(url_for('index'))
-	
-
 
 fake_settings = [{'sunrise': '0600', 'daylength': 12, 'set_temp':25}]
 
@@ -235,7 +273,6 @@ def get_settings(grow_id):
 	#only difference is the requests.header content type changes from application/json to text/html
 	return jsonify(json.loads(sttgs))
 	#return sttgs
-
 
 @app.route('/autopost/<user_id>', methods =['POST'])
 def autopost(user_id):

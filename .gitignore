@@ -8,4 +8,4 @@
 .idea/*
 
 #ignore tmp/nonces/
-tmp/nonces/
+tmp/*

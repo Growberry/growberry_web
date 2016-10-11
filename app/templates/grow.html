@@ -2,25 +2,17 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <h1>{{ grow.title }}</h1>
+    <h3>{{ grower.nickname }} started growing {{ grow.variety }} {{ momentjs(grow.startdate).fromNow() }}</h3>
     {% include 'flash.html' %}
-    <div class="well well-large" style="height: 140px;">
-        <div class="pull-right">
-            <img src="{{ user.avatar(128) }}" class="img-polaroid">
-        </div>
-        <h1>{{ grow.title }}</h1>
-        {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
-        {% if user.last_seen %}<p><em>Last seen on: {{ user.last_seen }}</em></p>{% endif %}
-        <p>Followers: {{ user.followers.count() - 1 }} | Following: {{ user.followed.count() - 1 }} |
-        {% if user.id == g.user.id %}
-            <a href="{{url_for('edit')}}">Edit your profile</a>
-        {% elif not g.user.is_following(user) %}
-            <a href="{{url_for('follow', nickname=user.nickname)}}">Follow</a>
-        {% else %}
-            <a href="{{url_for('unfollow', nickname=user.nickname)}}">Unfollow</a>
+    <p> {{ grow.settings }} </p>
+
+        {% if grow.user_id == g.user.id %}
+            {% if grow.is_active %}
+            <a href="{{url_for('settings', grow_id=grow.id)}}">Edit grow settings</a>
+            {% endif %}
         {% endif %}
-        {% if user.id == g.user.id %}
-            <a href="{{url_for('settings')}}">Edit your settings</a>
-        {% endif %}
-        </p>
-    </div>
+    {% for reading in readings.items %}
+        {% include reading %}
+    {% endfor %}
 {% endblock %}

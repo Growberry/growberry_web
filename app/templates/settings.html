@@ -1,0 +1,44 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Adjust settings of your grow.</h1>
+    {% include 'flash.html' %}
+    <div class="well">
+        <form class="form-horizontal" action="" method="post" name="edit">
+            {{ form.hidden_tag() }}
+            <div class="control-group{% if form.sunrise.errors %} error{% endif %}">
+                <label class="control-label" for="sunrise">Time the lights turn on each day? (format: HHMM -24hr)</label>
+                <div class="controls">
+                    {{ form.sunrise(cols=100, rows=1, class="span4") }}
+                    {% for error in form.sunrise.errors %}
+                        <span class="help-inline">[{{ error }}]</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="control-group{% if form.daylength.errors %} error{% endif %}">
+                <label class="control-label" for="daylength">Set the hours of light. (0-24)</label>
+                <div class="controls">
+                    {{ form.daylength(cols=24, rows=1, class="span4", default=settings['daylength']) }}
+                    {% for error in form.daylength.errors %}
+                        <span class="help-inline">[{{ error }}]</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="control-group{% if form.settemp.errors %} error{% endif %}">
+                <label class="control-label" for="settemp">Enter the desired temperature. (degrees C)</label>
+                <div class="controls">
+                    {{ form.settemp(cols=64, rows=4, class="span4", default=settings['settemp']) }}
+                    {% for error in form.settemp.errors %}
+                        <span class="help-inline">[{{ error }}]</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input class="btn btn-primary" type="submit" value="Start growing!">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

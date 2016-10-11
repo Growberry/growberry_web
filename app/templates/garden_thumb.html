@@ -4,7 +4,7 @@
         <td>
             <p><a href="{{ url_for('garden', nickname=grow.grower.nickname) }}">{{ grow.grower.nickname }}</a> Started growing {{ grow.variety }}  {{ momentjs(grow.startdate).fromNow() }}:</p>
             <p><strong>{{ grow.title }}</strong></p>
-            <li><a href="{{ url_for('user', nickname=grow.grower.nickname) }}">change this link to go to the grow.html</a></li>
+            <li><a href="{{ url_for('grow', grow_id=grow.id) }}">More details.</a></li>
         </td>
     </tr>
 </table>

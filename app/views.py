@@ -163,6 +163,7 @@ def grow(grow_id, page =1):
 	# grow_title = Grow.query.get(int(grow_id)).title
 	# grow_settings = json.loads(Grow.query.get(int(grow_id)).settings)
 	readingspast24 = grow.readings.order_by(Reading.timestamp.desc()).paginate(page, 12, False)
+	print readingspast24
 	return render_template('grow.html',
 						   title=grow.title,
 						   user = g.user,

@@ -9,3 +9,6 @@
 
 #ignore tmp/nonces/
 tmp/*
+
+#ignore the database (This will get too big to be on git)
+app.db

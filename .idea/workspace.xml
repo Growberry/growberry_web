@@ -5,13 +5,11 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/../growberry_pi/camera_test_image.py" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../growberry_pi/pwm_test.py" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../growberry_pi/timelapse.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.db" afterPath="$PROJECT_DIR$/app.db" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../growberry_pi/growberry/__init__.py" afterPath="$PROJECT_DIR$/../growberry_pi/growberry/__init__.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../growberry_pi/growberry/growberry_.py" afterPath="$PROJECT_DIR$/../growberry_pi/growberry/growberry_.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../growberry_pi/test_scripts/test_api_GET.py" afterPath="$PROJECT_DIR$/../growberry_pi/test_scripts/test_api_GET.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../growberry_pi/test_scripts/test_api_POST.py" afterPath="$PROJECT_DIR$/../growberry_pi/test_scripts/test_api_POST.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views.py" afterPath="$PROJECT_DIR$/app/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tmp/microblog.log" afterPath="$PROJECT_DIR$/tmp/microblog.log" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/grow.html" afterPath="$PROJECT_DIR$/app/templates/grow.html" />
     </list>
     <ignored path="growberry_web.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -77,11 +75,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="grow.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="grow.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/templates/grow.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="225">
-              <caret line="15" column="26" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="26" />
+              <caret line="15" column="20" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -109,7 +107,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="reading.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="reading.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/templates/reading.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
@@ -198,10 +196,10 @@
         <option value="$PROJECT_DIR$/app/templates/garden_thumb.html" />
         <option value="$PROJECT_DIR$/app/templates/settings.html" />
         <option value="$PROJECT_DIR$/app/forms.py" />
-        <option value="$PROJECT_DIR$/app/templates/grow.html" />
         <option value="$PROJECT_DIR$/config.py" />
         <option value="$PROJECT_DIR$/app/views.py" />
         <option value="$PROJECT_DIR$/app/templates/reading.html" />
+        <option value="$PROJECT_DIR$/app/templates/grow.html" />
       </list>
     </option>
   </component>
@@ -979,48 +977,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="165" column="24" selection-start-line="165" selection-start-column="24" selection-end-line="165" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#89#0" expanded="true" />
-            <element signature="e#813#852#0" expanded="false" />
-            <element signature="e#1660#2033#0" expanded="false" />
-            <element signature="e#2076#2895#0" expanded="false" />
-            <element signature="e#2934#2982#0" expanded="false" />
-            <element signature="e#3102#3419#0" expanded="false" />
-            <element signature="e#6495#7076#0" expanded="false" />
-            <element signature="e#7154#7711#0" expanded="false" />
-            <element signature="e#7787#7944#0" expanded="false" />
-            <element signature="e#8028#8190#0" expanded="false" />
-            <element signature="e#8256#8604#0" expanded="false" />
-            <element signature="e#9180#9502#0" expanded="false" />
-            <element signature="e#9581#9853#0" expanded="false" />
-            <element signature="e#9948#10270#0" expanded="false" />
-            <element signature="e#10347#10694#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/templates/grow.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="26" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="27" column="16" selection-start-line="25" selection-start-column="4" selection-end-line="27" selection-end-column="16" />
-          <folding>
-            <element signature="n#form#0;n#div#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/templates/garden.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -1057,6 +1013,48 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="94" selection-start-line="0" selection-start-column="94" selection-end-line="0" selection-end-column="94" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="165" column="24" selection-start-line="165" selection-start-column="24" selection-end-line="165" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#89#0" expanded="true" />
+            <element signature="e#813#852#0" expanded="false" />
+            <element signature="e#1660#2033#0" expanded="false" />
+            <element signature="e#2076#2895#0" expanded="false" />
+            <element signature="e#2934#2982#0" expanded="false" />
+            <element signature="e#3102#3419#0" expanded="false" />
+            <element signature="e#6495#7076#0" expanded="false" />
+            <element signature="e#7154#7711#0" expanded="false" />
+            <element signature="e#7787#7944#0" expanded="false" />
+            <element signature="e#8028#8190#0" expanded="false" />
+            <element signature="e#8256#8604#0" expanded="false" />
+            <element signature="e#9180#9502#0" expanded="false" />
+            <element signature="e#9581#9853#0" expanded="false" />
+            <element signature="e#9948#10270#0" expanded="false" />
+            <element signature="e#10347#10694#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="27" column="16" selection-start-line="25" selection-start-column="4" selection-end-line="27" selection-end-column="16" />
+          <folding>
+            <element signature="n#form#0;n#div#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/templates/grow.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="20" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="20" />
           <folding />
         </state>
       </provider>

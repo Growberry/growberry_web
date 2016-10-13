@@ -12,7 +12,24 @@
             <a href="{{url_for('settings', grow_id=grow.id)}}">Edit grow settings</a>
             {% endif %}
         {% endif %}
-    {% for reading in readings.items %}
-        {% include 'reading.html' %}
-    {% endfor %}
+
+        <table style="width:100%">
+            <tr>
+                <th> time </th>
+                <th> temp </th>
+                <th> humidity </th>
+            </tr>
+            {% for reading in readings.items %}
+                <tr>
+                    <th> {{ momentjs(reading.timestamp).fromNow() }}</th>
+                    <th> {{ reading.internal_temp }}</th>
+                    <th>{{ reading.internal_humidity }}</th>
+                </tr>
+            {% endfor %}
+        </table>
 {% endblock %}
+
+
+
+
+

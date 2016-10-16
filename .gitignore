@@ -12,3 +12,6 @@ tmp/*
 
 #ignore the database (This will get too big to be on git)
 app.db
+
+#ignore the search database (I don't know if I need this yet)
+search.db/*

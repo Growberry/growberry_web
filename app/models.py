@@ -14,10 +14,12 @@ followers = db.Table('followers',
 	db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
 
+
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
+	social_id = db.Column(db.String(64), nullable=False, unique=True)
 	nickname = db.Column(db.String(64), index = True, unique = True)
-	email = db.Column(db.String(120), index = True, unique = True)
+	email = db.Column(db.String(64), nullable=True)
 	posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
 	grows = db.relationship('Grow', backref = 'grower', lazy = 'dynamic')
 	about_me = db.Column(db.String(140))
@@ -28,6 +30,7 @@ class User(db.Model):
 								secondaryjoin = (followers.c.followed_id == id),
 								backref = db.backref('followers', lazy = 'dynamic'),
 								lazy = 'dynamic')
+
 	@staticmethod
 	def make_unique_nickname(nickname):
 		if User.query.filter_by(nickname=nickname).first() is None:
@@ -78,7 +81,10 @@ class User(db.Model):
 		except NameError:
 			return str(self.id)	#python 3
 	def avatar(self,size):
-		return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' % (md5(self.email.encode('utf-8')).hexdigest(), size)
+		try:
+			return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' % (md5(self.email.encode('utf-8')).hexdigest(), size)
+		except:
+			return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' % (md5('default_avatar@google.com').hexdigest(), size)
 
 	def __repr__(self):
 		return '<Usr %r>' % (self.nickname)

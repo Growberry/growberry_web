@@ -3,9 +3,6 @@ from wtforms import StringField, BooleanField, TextAreaField, IntegerField, Floa
 from wtforms.validators import DataRequired, Length, NumberRange
 from app.models import User
 
-class LoginForm(Form):
-	openid = StringField('openid', validators = [DataRequired()])
-	remember_me = BooleanField('remember_me', default = False)
 
 class EditForm(Form):
 	nickname = StringField('nickname', validators = [DataRequired()])
@@ -21,7 +18,7 @@ class EditForm(Form):
 		if self.nickname.data == self.original_nickname:
 			return True
 		if self.nickname.data != User.make_valid_nickname(self.nickname.data):
-			self.nickname.errors.append(gettext('This nickname has invalid characters. Please use letters, numbers, dots and underscores only.'))
+			self.nickname.errors.append('This nickname has invalid characters. Please use letters, numbers, dots and underscores only.')
 		user = User.query.filter_by(nickname=self.nickname.data).first()
 		if user != None:
 			self.nickname.errors.append('This nickname is already in use.  Please choose another one.')

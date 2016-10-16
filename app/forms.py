@@ -39,7 +39,7 @@ class CreateGrow(Form):
 		Form.__init__(self, *args, **kwargs)
 
 class GrowSettings(Form):
-	sunrise = StringField('sunrise', validators=[Length(min=4,max=4,message = '(HHMM) use only 4 numbers. No spaces or slashes'))])
+	sunrise = StringField('sunrise', validators=[Length(min=4,max=4,message = '(HHMM) use only 4 numbers. No spaces or slashes')])
 	daylength = IntegerField('daylength', validators = [NumberRange(min=0, max=24, message='enter only numbers between 0-24')])
 	settemp = StringField('settemp', default= "25")
 	def __init__(self, *args, **kwargs):

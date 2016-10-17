@@ -20,6 +20,7 @@ class User(db.Model):
 	social_id = db.Column(db.String(64), nullable=False, unique=True)
 	nickname = db.Column(db.String(64), index = True, unique = True)
 	email = db.Column(db.String(64), nullable=True)
+	profile_pic = db.Column(db.String(200), nullable = True)
 	posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
 	grows = db.relationship('Grow', backref = 'grower', lazy = 'dynamic')
 	about_me = db.Column(db.String(140))
@@ -81,6 +82,8 @@ class User(db.Model):
 		except NameError:
 			return str(self.id)	#python 3
 	def avatar(self,size):
+		if self.profile_pic:
+			return self.profile_pic
 		try:
 			return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' % (md5(self.email.encode('utf-8')).hexdigest(), size)
 		except:

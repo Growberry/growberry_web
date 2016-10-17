@@ -23,33 +23,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="82" column="8" selection-start-line="82" selection-start-column="8" selection-end-line="82" selection-end-column="8" />
-              <folding>
-                <element signature="e#0#89#0" expanded="true" />
-                <element signature="e#4868#5191#0" expanded="false" />
-                <element signature="e#5320#5906#0" expanded="false" />
-                <element signature="e#8289#8455#0" expanded="false" />
-                <element signature="e#8542#8749#0" expanded="false" />
-                <element signature="e#8818#9208#0" expanded="false" />
-                <element signature="e#9368#9723#0" expanded="false" />
-                <element signature="e#9805#10151#0" expanded="false" />
-                <element signature="e#10230#10502#0" expanded="false" />
-                <element signature="e#10597#10919#0" expanded="false" />
-                <element signature="e#10999#11424#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1245">
-              <caret line="83" column="26" selection-start-line="83" selection-start-column="26" selection-end-line="83" selection-end-column="26" />
+            <state relative-caret-position="-1005">
+              <caret line="22" column="15" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="15" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -60,8 +38,8 @@
       <file leaf-file-name="oauth.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/oauth.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="34" column="3" selection-start-line="34" selection-start-column="3" selection-end-line="46" selection-end-column="18" />
+            <state relative-caret-position="942">
+              <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
               <folding>
                 <element signature="e#0#46#0" expanded="true" />
               </folding>
@@ -111,16 +89,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="bootstrap.min.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/static/css/bootstrap.min.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1170">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="custom.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/static/css/custom.css">
           <provider selected="true" editor-type-id="text-editor">
@@ -131,11 +99,49 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="base.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/templates/base.html">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="60" selection-start-line="10" selection-start-column="60" selection-end-line="10" selection-end-column="60" />
+            <state relative-caret-position="279">
+              <caret line="100" column="12" selection-start-line="100" selection-start-column="12" selection-end-line="100" selection-end-column="12" />
+              <folding>
+                <element signature="e#0#89#0" expanded="true" />
+                <element signature="e#2813#2864#0" expanded="false" />
+                <element signature="e#3444#3949#0" expanded="false" />
+                <element signature="e#4034#4766#0" expanded="false" />
+                <element signature="e#4896#5219#0" expanded="false" />
+                <element signature="e#5348#5934#0" expanded="false" />
+                <element signature="e#6041#6820#0" expanded="false" />
+                <element signature="e#6897#7541#0" expanded="false" />
+                <element signature="e#7622#8239#0" expanded="false" />
+                <element signature="e#8317#8483#0" expanded="false" />
+                <element signature="e#8570#8777#0" expanded="false" />
+                <element signature="e#8846#9236#0" expanded="false" />
+                <element signature="e#9396#9751#0" expanded="false" />
+                <element signature="e#9833#10179#0" expanded="false" />
+                <element signature="e#10258#10530#0" expanded="false" />
+                <element signature="e#10625#10947#0" expanded="false" />
+                <element signature="e#11027#11452#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="post.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/templates/post.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="114" selection-start-line="4" selection-start-column="114" selection-end-line="4" selection-end-column="154" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="user.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/templates/user.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="74" selection-start-line="7" selection-start-column="74" selection-end-line="7" selection-end-column="74" />
               <folding />
             </state>
           </provider>
@@ -158,7 +164,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/app/templates/edit.html" />
-        <option value="$PROJECT_DIR$/app/templates/user.html" />
         <option value="$PROJECT_DIR$/app/templates/garden.html" />
         <option value="$PROJECT_DIR$/app/templates/post.html" />
         <option value="$PROJECT_DIR$/.gitignore" />
@@ -198,9 +203,10 @@
         <option value="$PROJECT_DIR$/app/static/css/custom.css" />
         <option value="$PROJECT_DIR$/app/templates/login.html" />
         <option value="$PROJECT_DIR$/app/__init__.py" />
-        <option value="$PROJECT_DIR$/app/oauth.py" />
         <option value="$PROJECT_DIR$/app/models.py" />
+        <option value="$PROJECT_DIR$/app/oauth.py" />
         <option value="$PROJECT_DIR$/app/views.py" />
+        <option value="$PROJECT_DIR$/app/templates/user.html" />
       </list>
     </option>
   </component>
@@ -264,6 +270,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="growberry_web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="growberry_web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -579,7 +603,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../growberry_pi/growberry/growberry.conf" />
     <entry file="file://$PROJECT_DIR$/../growberry_pi/growberry/sensors.py" />
     <entry file="file://$PROJECT_DIR$/../growberry_pi/growberry/pins.py" />
     <entry file="file://$PROJECT_DIR$/../growberry_pi/growberry/growberry_.py" />
@@ -710,13 +733,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/templates/post.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="114" selection-start-line="4" selection-start-column="114" selection-end-line="4" selection-end-column="154" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../thechatdotcom/templates/login.html" />
     <entry file="file://$PROJECT_DIR$/../flask-oauth-example/requirements.txt" />
     <entry file="file://$PROJECT_DIR$/../thechatdotcom/requirements.txt" />
@@ -821,8 +837,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/oauth.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="34" column="3" selection-start-line="34" selection-start-column="3" selection-end-line="46" selection-end-column="18" />
+        <state relative-caret-position="942">
+          <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
           <folding>
             <element signature="e#0#46#0" expanded="true" />
           </folding>
@@ -831,8 +847,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1245">
-          <caret line="83" column="26" selection-start-line="83" selection-start-column="26" selection-end-line="83" selection-end-column="26" />
+        <state relative-caret-position="-1005">
+          <caret line="22" column="15" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="15" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
@@ -841,21 +857,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="82" column="8" selection-start-line="82" selection-start-column="8" selection-end-line="82" selection-end-column="8" />
+        <state relative-caret-position="279">
+          <caret line="100" column="12" selection-start-line="100" selection-start-column="12" selection-end-line="100" selection-end-column="12" />
           <folding>
             <element signature="e#0#89#0" expanded="true" />
-            <element signature="e#4868#5191#0" expanded="false" />
-            <element signature="e#5320#5906#0" expanded="false" />
-            <element signature="e#8289#8455#0" expanded="false" />
-            <element signature="e#8542#8749#0" expanded="false" />
-            <element signature="e#8818#9208#0" expanded="false" />
-            <element signature="e#9368#9723#0" expanded="false" />
-            <element signature="e#9805#10151#0" expanded="false" />
-            <element signature="e#10230#10502#0" expanded="false" />
-            <element signature="e#10597#10919#0" expanded="false" />
-            <element signature="e#10999#11424#0" expanded="false" />
+            <element signature="e#2813#2864#0" expanded="false" />
+            <element signature="e#3444#3949#0" expanded="false" />
+            <element signature="e#4034#4766#0" expanded="false" />
+            <element signature="e#4896#5219#0" expanded="false" />
+            <element signature="e#5348#5934#0" expanded="false" />
+            <element signature="e#6041#6820#0" expanded="false" />
+            <element signature="e#6897#7541#0" expanded="false" />
+            <element signature="e#7622#8239#0" expanded="false" />
+            <element signature="e#8317#8483#0" expanded="false" />
+            <element signature="e#8570#8777#0" expanded="false" />
+            <element signature="e#8846#9236#0" expanded="false" />
+            <element signature="e#9396#9751#0" expanded="false" />
+            <element signature="e#9833#10179#0" expanded="false" />
+            <element signature="e#10258#10530#0" expanded="false" />
+            <element signature="e#10625#10947#0" expanded="false" />
+            <element signature="e#11027#11452#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/templates/post.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="114" selection-start-line="4" selection-start-column="114" selection-end-line="4" selection-end-column="154" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/templates/user.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="74" selection-start-line="7" selection-start-column="74" selection-end-line="7" selection-end-column="74" />
+          <folding />
         </state>
       </provider>
     </entry>

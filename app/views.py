@@ -70,13 +70,13 @@ def oauth_callback(provider):
     if not current_user.is_anonymous:
         return redirect(url_for('index'))
     oauth = OAuthSignIn.get_provider(provider)
-    social_id, username, email = oauth.callback()
+    social_id, username, email, picture = oauth.callback()
     if social_id is None:
         flash('Authentication failed.')
         return redirect(url_for('index'))
     user = User.query.filter_by(social_id=social_id).first()
     if not user:
-        user = User(social_id=social_id, nickname=username, email=email)
+        user = User(social_id=social_id, nickname=username, email=email, profile_pic=picture)
         db.session.add(user)
 #make users follow themselves
         db.session.add(user.follow(user))
@@ -98,7 +98,7 @@ def user(nickname, page=1):
     if user == None:
         flash('User %s not found.' % nickname)
         return redirect(url_for('index'))
-    posts = g.user.posts.order_by(Post.timestamp.desc()).paginate(page, POSTS_PER_PAGE, False)
+    posts = user.posts.order_by(Post.timestamp.desc()).paginate(page, POSTS_PER_PAGE, False)
     return render_template('user.html',
                             user=user,
                             posts = posts)

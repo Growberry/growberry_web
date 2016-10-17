@@ -79,7 +79,8 @@ class FacebookSignIn(OAuthSignIn):
             me.get('email').split('@')[0],  # Facebook does not provide
                                             # username, so the email's user
                                             # is used instead
-            me.get('email')
+            me.get('email'),
+            None                            # not sure how to get picture yet
         )
 
 
@@ -115,7 +116,7 @@ class TwitterSignIn(OAuthSignIn):
         me = oauth_session.get('account/verify_credentials.json').json()
         social_id = 'twitter$' + str(me.get('id'))
         username = me.get('screen_name')
-        return social_id, username, None   # Twitter does not provide email
+        return social_id, username, None, None   # Twitter does not provide email, not sure about picture
 
 class GoogleSignIn(OAuthSignIn):
     def __init__(self):
@@ -152,4 +153,5 @@ class GoogleSignIn(OAuthSignIn):
 # """me ends up being a dictionary with plenty of stuff in it #not sure exactly what 'sub' is.  But it seems to be a unique enough number to use as social ID"""
         return (me['sub'],
                 me['name'],
-                me['email'])
+                me['email'],
+                me['picture'])

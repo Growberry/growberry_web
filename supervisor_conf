@@ -1,0 +1,12 @@
+# this file needs to be moved to:  /etc/supervisor/conf.d/growberry_web.conf
+# the logfile directory needs to be made as well
+# obviously remove these comments
+
+[program:growberry_web]
+command = /home/apps/growberry_web/flask/bin/gunicorn app:app -w 4
+directory = /home/apps/growberry_web/
+user = apps
+stdout_logfile = /home/apps/growberry_web/logs/gunicorn/gunicorn_stdout.log
+stderr_logfile = /home/apps/growberry_web/logs/gunicorn/gunicorn_stderr.log
+redirect_stderr = True
+environment = PRODUCTION=1

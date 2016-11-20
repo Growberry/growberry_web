@@ -124,10 +124,33 @@ class Grow(db.Model):
 class Reading(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	timestamp = db.Column(db.DateTime)
+	lights = db.Column(db.Integer)
+	fanspeed = db.Column(db.String)
+	heatsink_temps = db.Column(db.String)
 	internal_temp = db.Column(db.String)
 	internal_humidity = db.Column(db.String)
+	external_temp = db.Column(db.String)
+	external_humidity = db.Column(db.String)
 	pic_dir = db.Column(db.String)
 	grow_id = db.Column(db.Integer, db.ForeignKey('grow.id'))
 
 if enable_search:
 	whooshalchemy.whoosh_index(app, Post)
+
+
+
+# class Reading(db.Model):
+# 	id = db.Column(db.Integer, primary_key = True)
+# 	timestamp = db.Column(db.DateTime)
+# 	lights = db.Column(db.Integer)
+# 	fanspeed = db.Column(db.Float)
+# 	heatsink_temps = db.Column(db.String)
+# 	internal_temp = db.Column(db.Float)
+# 	internal_humidity = db.Column(db.Float)
+# 	external_temp = db.Column(db.Float)
+# 	external_humidity = db.Column(db.Float)
+# 	pic_dir = db.Column(db.String)
+# 	grow_id = db.Column(db.Integer, db.ForeignKey('grow.id'))
+#
+# if enable_search:
+# 	whooshalchemy.whoosh_index(app, Post)

@@ -268,11 +268,16 @@ fake_settings = [{'sunrise': '0600', 'daylength': 12, 'set_temp':25}]
 
 @app.route('/get_settings/<grow_id>', methods =['GET'])
 def get_settings(grow_id):
-    """returns the settings for the specified grow"""
+    """returns the settings for the specified grow - need to change this to the specified barrel.
+    will need to find all grows with barrel_id to the one in the URL, sort them by is_active. Will also need to add a barrel
+    table in the database, and an foreign key for barrel_id in each grow."""
     sttgs = Grow.query.get(int(grow_id)).settings
+    settings_dict = json.loads(sttgs)
+    settings_dict['startdate'] = Grow.query.get(int(grow_id)).startdate.strftime('%m%d%y')
     #seems that it doesn't matter at all if you just return the string/unicode or jsonify it first.
     #only difference is the requests.header content type changes from application/json to text/html
-    return jsonify(json.loads(sttgs))
+    #return jsonify(json.loads(sttgs))  #works
+    return jsonify(settings_dict)
     #return sttgs
 
 @app.route('/autopost/<user_id>', methods =['POST'])
@@ -317,15 +322,26 @@ def api_echo():
     elif request.method == 'DELETE':
         return "ECHO: DELETE"
 
+
 @app.route('/reading/<grow_id>', methods =['POST'])
 def reading(grow_id):
+    """
+    Normally you would not have to str() everything,
+    but for some reason sqlite doesn't like anything but string and int
+    """
     if not request.json:
         abort(400)
-    reading = Reading(timestamp = datetime.utcnow(),
-                      internal_temp = request.json['internal_temp'],
-                      internal_humidity = request.json['internal_humidity'],
-                      pic_dir = request.json['pic_dir'],
-                      grow_id = int(grow_id))
+    reading = Reading(timestamp=datetime.strptime(request.json['timestamp'], "%Y-%m-%dT%H:%M:%S.%f"),
+                      lights=request.json['lights'],
+                      fanspeed=str(request.json['fanspeed']),
+                      internal_temp=str(request.json['sensors']['internal']['temp']),
+                      internal_humidity=str(request.json['sensors']['internal']['humidity']),
+                      external_temp=str(request.json['sensors']['external']['temp']),
+                      external_humidity=str(request.json['sensors']['external']['humidity']),
+                      heatsink_temps='|'.join([str(x) for x in request.json['sinktemps']]),
+                      pic_dir=request.json['pic_dir'],
+                      grow_id=int(grow_id)
+                      )
     db.session.add(reading)
     db.session.commit()
     return str(reading.id), 201

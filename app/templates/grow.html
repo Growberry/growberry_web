@@ -103,15 +103,23 @@
 
         <table style="width:100%">
             <tr>
-                <th> time </th>
-                <th> temp </th>
-                <th> humidity </th>
+                <th> Time </th>
+                <th>Lights</th>
+                <th>Fanspeed</th>
+                <th>internal temp</th>
+                <th>internal humidity</th>
+                <th>external temp </th>
+                <th>external humidity </th>
             </tr>
             {% for reading in readings.items %}
                 <tr>
                     <th> {{ momentjs(reading.timestamp).format("ddd, hA") }}</th>
+                    <th> {{ reading.lights }} </th>
+                    <th> {{ reading.fanspeed }} </th>
                     <th> {{ reading.internal_temp }}</th>
-                    <th>{{ reading.internal_humidity }}</th>
+                    <th> {{ reading.internal_humidity }}</th>
+                    <th> {{ reading.external_temp }}</th>
+                    <th> {{ reading.external_humidity }}</th>
                 </tr>
             {% endfor %}
         </table>

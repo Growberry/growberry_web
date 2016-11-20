@@ -127,6 +127,7 @@ class Reading(db.Model):
 	lights = db.Column(db.Integer)
 	fanspeed = db.Column(db.String)
 	heatsink_temps = db.Column(db.String)
+	max_sinktemp = db.Column(db.String)
 	internal_temp = db.Column(db.String)
 	internal_humidity = db.Column(db.String)
 	external_temp = db.Column(db.String)

@@ -162,8 +162,10 @@ def grow(grow_id, page =1):
     grower = User.query.get(grow.user_id)
     # grow_title = Grow.query.get(int(grow_id)).title
     # grow_settings = json.loads(Grow.query.get(int(grow_id)).settings)
-    readingspast24 = grow.readings.order_by(Reading.timestamp.desc()).paginate(page, 12, False)
-    print readingspast24
+    readingspast24 = grow.readings.order_by(Reading.timestamp.desc()).paginate(page, 24, False)
+    # print readingspast24
+    # for reading in readingspast24.items():
+    #     print reading.heatsink_temps
     return render_template('grow.html',
                            title=grow.title,
                            user = g.user,
@@ -339,6 +341,7 @@ def reading(grow_id):
                       external_temp=str(request.json['sensors']['external']['temp']),
                       external_humidity=str(request.json['sensors']['external']['humidity']),
                       heatsink_temps='|'.join([str(x) for x in request.json['sinktemps']]),
+                      max_sinktemp=str(max(request.json['sinktemps'])),
                       pic_dir=request.json['pic_dir'],
                       grow_id=int(grow_id)
                       )

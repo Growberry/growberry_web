@@ -106,6 +106,7 @@
                 <th> Time </th>
                 <th>Lights</th>
                 <th>Fanspeed</th>
+                <th>Heatsink temp</th>
                 <th>internal temp</th>
                 <th>internal humidity</th>
                 <th>external temp </th>
@@ -116,10 +117,11 @@
                     <th> {{ momentjs(reading.timestamp).format("ddd, hA") }}</th>
                     <th> {{ reading.lights }} </th>
                     <th> {{ reading.fanspeed }} </th>
-                    <th> {{ reading.internal_temp }}</th>
-                    <th> {{ reading.internal_humidity }}</th>
-                    <th> {{ reading.external_temp }}</th>
-                    <th> {{ reading.external_humidity }}</th>
+                    <th> {{ reading.max_sinktemp }} </th>
+                    <th> {{ reading.internal_temp }} C</th>
+                    <th> {{ reading.internal_humidity }}%</th>
+                    <th> {{ reading.external_temp }} C</th>
+                    <th> {{ reading.external_humidity }}%</th>
                 </tr>
             {% endfor %}
         </table>

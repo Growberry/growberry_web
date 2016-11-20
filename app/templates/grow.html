@@ -114,7 +114,7 @@
             </tr>
             {% for reading in readings.items %}
                 <tr>
-                    <th> {{ momentjs(reading.timestamp).format("ddd, hA") }}</th>
+                    <th> {{ momentjs(reading.timestamp).format("YYYY-MM-DD HH:mm") }}</th>
                     <th> {{ reading.lights }} </th>
                     <th> {{ reading.fanspeed }} </th>
                     <th> {{ reading.max_sinktemp }} </th>

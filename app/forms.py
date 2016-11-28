@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import StringField, BooleanField, TextAreaField, IntegerField, FloatField
+from wtforms import StringField, BooleanField, TextAreaField, IntegerField, FloatField, SubmitField
 from wtforms.validators import DataRequired, Length, NumberRange
 from app.models import User
 
@@ -47,3 +47,8 @@ class PostForm(Form):
 
 class SearchForm(Form):
 	search = StringField('search', validators = [DataRequired()])
+
+
+class SettingsForm(Form):
+	message = StringField()
+	submit = SubmitField()

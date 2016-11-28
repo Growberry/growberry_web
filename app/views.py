@@ -1,7 +1,8 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, jsonify
 from flask_login import login_user, logout_user, current_user, login_required, abort
+from flask_uploads import UploadSet, IMAGES, configure_uploads
 from app import app, db, lm
-from .forms import EditForm, PostForm, SearchForm, CreateGrow, GrowSettings
+from .forms import EditForm, PostForm, SearchForm, CreateGrow, GrowSettings, SettingsForm
 from .models import User, Post, Grow, Reading
 from .emails import follower_notification
 from datetime import datetime
@@ -173,6 +174,28 @@ def grow(grow_id, page =1):
                            grower =grower,
                            readings = readingspast24)
 
+
+
+
+
+@app.route("/testsettings/", methods= ['GET', 'POST'])
+def testsettings():
+    saved_settings = Settings()
+    form = SettingsForm(obj=saved_settings)
+
+    if form.validate_on_submit():
+        form.populate_obj(saved_settings)
+        flash(saved_settings.message)
+
+    return render_template("fakegrow.html", form=form)
+
+class Settings(object):
+    def __init__(self, settingsdict):
+        message = "original message"
+        sunrise = settingsdict['sunrise']
+        daylength = settingsdict['daylength']
+        settemp = settingsdict['settemp']
+
 @app.route('/settings/<int:grow_id>',methods=['GET', 'POST'])
 @login_required
 def settings(grow_id):
@@ -180,11 +203,14 @@ def settings(grow_id):
     # myForm.display.default = 'ONE'
     # myForm.process()  # process choices & default
     grow = Grow.query.get(int(grow_id))
+
     try:
         settings = json.loads(grow.settings)
+        growsettings = Settings(settings)
     except:
         settings = {}
     if form.validate_on_submit():
+        form.populate_obj(growsettings)
         settings['sunrise'] = form.sunrise.data
         settings['daylength'] = form.daylength.data
         settings['settemp'] = form.settemp.data
@@ -333,6 +359,39 @@ def reading(grow_id):
     """
     if not request.json:
         abort(400)
+
+    # will need more robust dynamic error checking
+    stand_in_sensor = {"timestamp": "2016-04-20T04:20:00.000000", "temp": 99.9, "humidity": 99.9}
+    if 'internal' not in request.json['sensors']:
+        request.json['sensors']['internal'] = stand_in_sensor
+    elif 'external' not in request.json['sensors']:
+        request.json['sensors']['external'] = stand_in_sensor
+
+    #
+    # internal_check = request.json['sensors'].get('internal', stand_in_sensor)
+    # external_check = request.json['sensors'].get('external', stand_in_sensor)
+
+    try:
+        max(request.json['sinktemps'])
+    except ValueError:
+        request.json['sinktemps'].append(30.0001)
+
+
+    # internal_temp = ""
+    # internal_humidity = ""
+    # external_temp = ""
+    # external_humidity = ""
+    # if 'internal' in request.json['sensors']:
+    #     internal_temp = str(request.json['sensors']['internal']['temp'])
+    #     internal_humidity = str(request.json['sensors']['internal']['humidity'])
+    # elif ''request.json['sensors']
+    # external_temp = str(request.json['sensors']['external']['temp']),
+    # external_humidity = str(request.json['sensors']['external']['humidity']),
+    # heatsink_temps = '|'.join([str(x) for x in request.json['sinktemps']]),
+    # max_sinktemp = str(max(request.json['sinktemps'])),
+    # pic_dir = request.json['pic_dir'],
+    # grow_id = int(grow_id)
+
     reading = Reading(timestamp=datetime.strptime(request.json['timestamp'], "%Y-%m-%dT%H:%M:%S.%f"),
                       lights=request.json['lights'],
                       fanspeed=str(request.json['fanspeed']),
@@ -348,3 +407,55 @@ def reading(grow_id):
     db.session.add(reading)
     db.session.commit()
     return str(reading.id), 201
+
+
+# photos = UploadSet('photos', IMAGES)
+#
+# @app.route('/upload', methods=['POST'])
+# def upload():
+#     if request.method == 'POST' and 'photo' in request.files:
+#         filename = photos.save(request.files['photo'])
+#         rec = Photo(filename=filename)
+#         rec.store()
+#         flash("Photo saved.")
+#         return redirect(url_for('show', id=rec.id))
+#     return jsonify({'error': 'you messed up'})
+#
+# @app.route('/photo/<id>')
+# def show(id):
+#     photo = Photo.load(id)
+#     if photo is None:
+#         abort(404)
+#     url = photos.url(photo.filename)
+#     return render_template('show.html', url=url, photo=photo)
+
+
+###############  this works for now ####################
+# photos = UploadSet('photos',IMAGES)
+#
+# app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/img/newfolder'
+# configure_uploads(app, photos)
+#
+# @app.route('/upload', methods=['GET','POST'])
+# def upload():
+#     if request.method == 'POST' and 'photo' in request.files:
+#         filename = photos.save(request.files['photo'])
+#         return filename
+#     return render_template('upload.html')
+#########################################################
+
+photos = UploadSet('photos',IMAGES)
+
+app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/img/newfolder'
+configure_uploads(app, photos)
+#
+# @app.route('/upload', methods=['GET','POST'])
+# def upload():
+#     if request.method == 'POST':
+#         if 'photo' in request.files:
+#
+#         arguments = '|'.join([str(x) for x in request.files])
+#         return str(request.args)
+#
+#         # print arguments
+#     return render_template('upload.html')

@@ -49,6 +49,7 @@ class SearchForm(Form):
 	search = StringField('search', validators = [DataRequired()])
 
 
-class SettingsForm(Form):
-	message = StringField()
-	submit = SubmitField()
+class SettingsForm1(Form):
+    message = StringField()
+    sunrise = StringField()
+    # submit = SubmitField()

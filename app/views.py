@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required, abort
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 from app import app, db, lm
-from .forms import EditForm, PostForm, SearchForm, CreateGrow, GrowSettings, SettingsForm
+from .forms import EditForm, PostForm, SearchForm, CreateGrow, GrowSettings, SettingsForm1
 from .models import User, Post, Grow, Reading
 from .emails import follower_notification
 from datetime import datetime
@@ -175,40 +175,24 @@ def grow(grow_id, page =1):
                            readings = readingspast24)
 
 
-
-
-
-@app.route("/testsettings/", methods= ['GET', 'POST'])
-def testsettings():
-    saved_settings = Settings()
-    form = SettingsForm(obj=saved_settings)
-
-    if form.validate_on_submit():
-        form.populate_obj(saved_settings)
-        flash(saved_settings.message)
-
-    return render_template("fakegrow.html", form=form)
-
 class Settings(object):
     def __init__(self, settingsdict):
-        message = "original message"
-        sunrise = settingsdict['sunrise']
-        daylength = settingsdict['daylength']
-        settemp = settingsdict['settemp']
+        self.sunrise = settingsdict['sunrise']
+        self.daylength = settingsdict['daylength']
+        self.settemp = settingsdict['settemp']
 
 @app.route('/settings/<int:grow_id>',methods=['GET', 'POST'])
 @login_required
 def settings(grow_id):
-    form = GrowSettings()
-    # myForm.display.default = 'ONE'
-    # myForm.process()  # process choices & default
     grow = Grow.query.get(int(grow_id))
-
+    print grow.settings
     try:
         settings = json.loads(grow.settings)
-        growsettings = Settings(settings)
     except:
-        settings = {}
+        settings = {'sunrise': '0420', 'daylength':18, 'settemp':'25'}
+
+    growsettings = Settings(settings)
+    form = GrowSettings(obj=growsettings)
     if form.validate_on_submit():
         form.populate_obj(growsettings)
         settings['sunrise'] = form.sunrise.data
@@ -459,3 +443,17 @@ configure_uploads(app, photos)
 #
 #         # print arguments
 #     return render_template('upload.html')
+
+
+
+@app.route("/settings1/<dawn>", methods= ['GET', 'POST'])
+def settings1(dawn):
+
+    saved_settings = Settings1(sunrise=dawn)
+    form = SettingsForm1(obj=saved_settings)
+
+    if form.validate_on_submit():
+        form.populate_obj(saved_settings)
+        flash(saved_settings.message)
+
+    return render_template("settings1.html", form=form)

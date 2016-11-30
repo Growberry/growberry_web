@@ -413,47 +413,55 @@ def reading(grow_id):
 #     url = photos.url(photo.filename)
 #     return render_template('show.html', url=url, photo=photo)
 
-
-###############  this works for now ####################
-# photos = UploadSet('photos',IMAGES)
-#
-# app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/img/newfolder'
-# configure_uploads(app, photos)
-#
-# @app.route('/upload', methods=['GET','POST'])
-# def upload():
-#     if request.method == 'POST' and 'photo' in request.files:
-#         filename = photos.save(request.files['photo'])
-#         return filename
-#     return render_template('upload.html')
-#########################################################
+# @app.route('/reading/<grow_id>', methods =['POST'])
+# def reading(grow_id):
 
 photos = UploadSet('photos',IMAGES)
 
-app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/img/newfolder'
+app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/img/growpics/'
 configure_uploads(app, photos)
-#
-# @app.route('/upload', methods=['GET','POST'])
-# def upload():
-#     if request.method == 'POST':
-#         if 'photo' in request.files:
-#
-#         arguments = '|'.join([str(x) for x in request.files])
-#         return str(request.args)
-#
-#         # print arguments
-#     return render_template('upload.html')
+
+@app.route('/multi/<grow_id>', methods =['POST'])
+def multi(grow_id):
+
+    print request.files
+    if 'metadata' in request.files:
+        subjson = request.files['metadata'].read()
+        submitted_data = json.loads(subjson)
+        submitted_sensors = submitted_data['sensors']
+        maxsinktemp = None
+        try:
+            maxsinktemp = max(submitted_data['sinktemps'])
+        except ValueError:
+            maxsinktemp = 'NA'
 
 
+        if len(maxsinktemp) == 0:
+            maxsinktemp.append()
+        reading = Reading(timestamp=datetime.strptime(submitted_data['timestamp'], "%Y-%m-%dT%H:%M:%S.%f"),
+                          lights=submitted_data['lights'],
+                          fanspeed=str(submitted_data['fanspeed']),
+                          internal_temp=str(submitted_sensors.get('internal', {'temp':"NA"})['temp']),
+                          internal_humidity=str(submitted_sensors.get('internal', {'humidity':"NA"})['humidity']),
+                          external_temp=str(submitted_sensors.get('external', {'temp':"NA"})['temp']),
+                          external_humidity=str(submitted_sensors.get('internal', {'humidity':"NA"})['humidity']),
+                          heatsink_temps='|'.join([str(x) for x in submitted_data['sinktemps']]),
+                          max_sinktemp=str(maxsinktemp),
+                          pic_dir=submitted_data['pic_dir'],
+                          grow_id=int(grow_id)
+                          )
+        db.session.add(reading)
+        db.session.commit()
 
-@app.route("/settings1/<dawn>", methods= ['GET', 'POST'])
-def settings1(dawn):
+        if 'photo' in request.files:
+            grow = Grow.query.get(int(grow_id))
+            photo_name = str(reading.id) + '.png'
+            photo_loc = str(grow.user_id) + '/' + str(grow_id)
+            filename = photos.save(request.files['photo'], folder=photo_loc, name=photo_name)
+        # return 'photo was saved as: %s. with metadata param_1 = %s'%(filename, subjson['fanspeed'])
 
-    saved_settings = Settings1(sunrise=dawn)
-    form = SettingsForm1(obj=saved_settings)
+        # try:
+            # return 'photo was saved as: %s. with metadata param_1 = %s' % (filename, subjson['param_1'])
+        # except (put whatever exceptions get raised for missing photo, or missing json)
 
-    if form.validate_on_submit():
-        form.populate_obj(saved_settings)
-        flash(saved_settings.message)
-
-    return render_template("settings1.html", form=form)
+    return str(reading.id), 201

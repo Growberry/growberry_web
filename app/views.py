@@ -423,7 +423,7 @@ configure_uploads(app, photos)
 
 @app.route('/multi/<grow_id>', methods =['POST'])
 def multi(grow_id):
-
+    results = {}
     print request.files
     if 'metadata' in request.files:
         subjson = request.files['metadata'].read()
@@ -436,8 +436,8 @@ def multi(grow_id):
             maxsinktemp = 'NA'
 
 
-        if len(maxsinktemp) == 0:
-            maxsinktemp.append()
+        # if len(maxsinktemp) == 0:
+        #     maxsinktemp.append()
         reading = Reading(timestamp=datetime.strptime(submitted_data['timestamp'], "%Y-%m-%dT%H:%M:%S.%f"),
                           lights=submitted_data['lights'],
                           fanspeed=str(submitted_data['fanspeed']),
@@ -463,5 +463,5 @@ def multi(grow_id):
         # try:
             # return 'photo was saved as: %s. with metadata param_1 = %s' % (filename, subjson['param_1'])
         # except (put whatever exceptions get raised for missing photo, or missing json)
-
-    return str(reading.id), 201
+            results = {'reading_id':reading.id, 'photo_loc':filename}
+            return jsonify(results), 201

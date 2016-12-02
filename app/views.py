@@ -163,16 +163,19 @@ def grow(grow_id, page =1):
     grower = User.query.get(grow.user_id)
     # grow_title = Grow.query.get(int(grow_id)).title
     # grow_settings = json.loads(Grow.query.get(int(grow_id)).settings)
+    most_recent_reading = grow.readings.order_by(Reading.timestamp.desc()).first()
+    lastpic = '/static/img/growpics/%s/%s/%s.jpg'%(grow.user_id,grow_id,most_recent_reading.id)
     readingspast24 = grow.readings.order_by(Reading.timestamp.desc()).paginate(page, 24, False)
     # print readingspast24
     # for reading in readingspast24.items():
     #     print reading.heatsink_temps
     return render_template('grow.html',
                            title=grow.title,
-                           user = g.user,
+                           user=g.user,
                            grow=grow,
-                           grower =grower,
-                           readings = readingspast24)
+                           grower=grower,
+                           readings=readingspast24,
+                           lastpic=lastpic)
 
 
 class Settings(object):
@@ -455,7 +458,7 @@ def multi(grow_id):
 
         if 'photo' in request.files:
             grow = Grow.query.get(int(grow_id))
-            photo_name = str(reading.id) + '.png'
+            photo_name = str(reading.id) + '.jpg'
             photo_loc = str(grow.user_id) + '/' + str(grow_id)
             filename = photos.save(request.files['photo'], folder=photo_loc, name=photo_name)
         # return 'photo was saved as: %s. with metadata param_1 = %s'%(filename, subjson['fanspeed'])

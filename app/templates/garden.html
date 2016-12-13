@@ -12,7 +12,7 @@
         {% if user.id == g.user.id %}
             <a href="{{url_for('addgrow')}}">Start new grow!</a>
         {% endif %}
-        </p>
+
     </div>
     {% for grow in grows.items %}
         {% include 'garden_thumb.html' %}

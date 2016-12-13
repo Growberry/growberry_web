@@ -152,8 +152,12 @@ def garden(nickname, page =1):
     if user == None:
         flash('User %s not found.' %nickname)
         return redirect(url_for('index'))
+    # most_recent_reading = grow.readings.order_by(Reading.timestamp.desc()).first()
+    # lastpic = '/static/img/growpics/%s/%s/%s.jpg' % (grow.user_id, grow_id, most_recent_reading.id)
     grows = g.user.grows.order_by(Grow.startdate.desc()).paginate(page, POSTS_PER_PAGE,False)
     return render_template('garden.html', user=user,grows =grows)
+
+
 
 @app.route('/grow/<int:grow_id>')
 @app.route('/grow/<int:grow_id>/<int:page>')
@@ -161,10 +165,12 @@ def garden(nickname, page =1):
 def grow(grow_id, page =1):
     grow = Grow.query.get(int(grow_id))
     grower = User.query.get(grow.user_id)
+    lastpic = '/static/img/no_picture_yet.jpg'
     # grow_title = Grow.query.get(int(grow_id)).title
     # grow_settings = json.loads(Grow.query.get(int(grow_id)).settings)
     most_recent_reading = grow.readings.order_by(Reading.timestamp.desc()).first()
-    lastpic = '/static/img/growpics/%s/%s/%s.jpg'%(grow.user_id,grow_id,most_recent_reading.id)
+    if most_recent_reading:
+        lastpic = '/static/img/growpics/%s/%s/%s.jpg'%(grow.user_id,grow_id,most_recent_reading.id)
     readingspast24 = grow.readings.order_by(Reading.timestamp.desc()).paginate(page, 24, False)
     # print readingspast24
     # for reading in readingspast24.items():
@@ -447,24 +453,29 @@ def multi(grow_id):
                           internal_temp=str(submitted_sensors.get('internal', {'temp':"NA"})['temp']),
                           internal_humidity=str(submitted_sensors.get('internal', {'humidity':"NA"})['humidity']),
                           external_temp=str(submitted_sensors.get('external', {'temp':"NA"})['temp']),
-                          external_humidity=str(submitted_sensors.get('internal', {'humidity':"NA"})['humidity']),
+                          external_humidity=str(submitted_sensors.get('external', {'humidity':"NA"})['humidity']),
                           heatsink_temps='|'.join([str(x) for x in submitted_data['sinktemps']]),
                           max_sinktemp=str(maxsinktemp),
-                          pic_dir=submitted_data['pic_dir'],
+                          pic_dir='/fake/',
                           grow_id=int(grow_id)
                           )
+
         db.session.add(reading)
         db.session.commit()
+        results.update({'reading_id': reading.id})
 
         if 'photo' in request.files:
             grow = Grow.query.get(int(grow_id))
+            # we can't properly create the pic_dir until we knew the reading_id
+            working_pic_dir = '/static/img/growpics/%s/%s/%s.jpg' % (grow.user_id, grow_id, reading.id)
             photo_name = str(reading.id) + '.jpg'
             photo_loc = str(grow.user_id) + '/' + str(grow_id)
             filename = photos.save(request.files['photo'], folder=photo_loc, name=photo_name)
-        # return 'photo was saved as: %s. with metadata param_1 = %s'%(filename, subjson['fanspeed'])
+            reading.pic_dir = str(filename)
+            results.update({'photo_loc':filename})
 
-        # try:
-            # return 'photo was saved as: %s. with metadata param_1 = %s' % (filename, subjson['param_1'])
-        # except (put whatever exceptions get raised for missing photo, or missing json)
-            results = {'reading_id':reading.id, 'photo_loc':filename}
-            return jsonify(results), 201
+        db.session.commit()
+    else:
+        results.update({'error':'No metadata detected in request.'})
+
+    return jsonify(results), 201

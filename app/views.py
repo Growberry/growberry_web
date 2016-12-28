@@ -154,7 +154,7 @@ def garden(nickname, page =1):
         return redirect(url_for('index'))
     # most_recent_reading = grow.readings.order_by(Reading.timestamp.desc()).first()
     # lastpic = '/static/img/growpics/%s/%s/%s.jpg' % (grow.user_id, grow_id, most_recent_reading.id)
-    grows = g.user.grows.order_by(Grow.startdate.desc()).paginate(page, POSTS_PER_PAGE,False)
+    grows = g.user.grows.order_by(Grow.is_active.desc(),Grow.startdate.desc()).paginate(page, POSTS_PER_PAGE,False)
     return render_template('garden.html', user=user,grows =grows)
 
 
@@ -183,6 +183,15 @@ def grow(grow_id, page =1):
                            readings=readingspast24,
                            lastpic=lastpic)
 
+@app.route('/end_grow/<int:grow_id>')
+@login_required
+def end_grow(grow_id):
+    grow = Grow.query.get(int(grow_id))
+    grow.is_active = 0
+    db.session.add(grow)
+    db.session.commit()
+    flash("Your grow has ended!  Don't forget to add your final yield!")
+    return redirect(url_for('grow', grow_id=grow_id))
 
 class Settings(object):
     def __init__(self, settingsdict):
@@ -292,14 +301,16 @@ def get_settings(grow_id):
     """returns the settings for the specified grow - need to change this to the specified barrel.
     will need to find all grows with barrel_id to the one in the URL, sort them by is_active. Will also need to add a barrel
     table in the database, and an foreign key for barrel_id in each grow."""
-    sttgs = Grow.query.get(int(grow_id)).settings
+    grow = Grow.query.get(int(grow_id))
+    sttgs = grow.settings
     settings_dict = json.loads(sttgs)
-    settings_dict['startdate'] = Grow.query.get(int(grow_id)).startdate.strftime('%m%d%y')
+    settings_dict['startdate'] = grow.startdate.strftime('%m%d%y')
+    settings_dict['is_active'] = grow.is_active
     #seems that it doesn't matter at all if you just return the string/unicode or jsonify it first.
     #only difference is the requests.header content type changes from application/json to text/html
     #return jsonify(json.loads(sttgs))  #works
     return jsonify(settings_dict)
-    #return sttgs
+
 
 @app.route('/autopost/<user_id>', methods =['POST'])
 def autopost(user_id):

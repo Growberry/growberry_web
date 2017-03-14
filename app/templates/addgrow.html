@@ -34,15 +34,6 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="control-group{% if form.thumb.errors %} error{% endif %}">
-                <label class="control-label" for="thumb"> location of thumbnail.hml </label>
-                <div class="controls">
-                    {{ form.thumb(cols=24, rows=1, class="span4") }}
-                    {% for error in form.thumb.errors %}
-                        <span class="help-inline">[{{ error }}]</span><br>
-                    {% endfor %}
-                </div>
-            </div>
             <div class="control-group">
                 <div class="controls">
                     <label class="checkbox" for="is_active">

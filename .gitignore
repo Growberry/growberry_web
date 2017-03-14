@@ -15,3 +15,6 @@ app.db
 
 #ignore the search database (I don't know if I need this yet)
 search.db/*
+
+#ignore static growpics
+app/static/img/growpics/*

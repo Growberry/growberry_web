@@ -26,10 +26,8 @@ class EditForm(Form):
 		return True
 
 class CreateGrow(Form):
-
 	title = StringField('title', validators = [Length(min=0,max=140)])
 	is_active = BooleanField('is_active', default = True)
-	thumb = TextAreaField('thumb', validators = [Length(min=0,max=140)])
 	variety = TextAreaField('variety', validators = [Length(min=0,max=140)])
 	settings = TextAreaField('settings', validators = [Length(min=0)])
 	def __init__(self, *args, **kwargs):
@@ -45,11 +43,9 @@ class GrowSettings(Form):
 class PostForm(Form):
 	post = StringField('post', validators = [DataRequired()])
 
+class GrowNoteForm(Form):
+	grownote = StringField('post', validators = [DataRequired()])
+
 class SearchForm(Form):
 	search = StringField('search', validators = [DataRequired()])
 
-
-class SettingsForm1(Form):
-    message = StringField()
-    sunrise = StringField()
-    # submit = SubmitField()

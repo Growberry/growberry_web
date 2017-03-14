@@ -1,10 +1,17 @@
 <table class="table table-hover">
     <tr>
-        <td width="70px"><a href="{{ url_for('garden', nickname=grow.grower.nickname) }}"><img src="{{ grow.grower.avatar(70) }}" /></a></td>
+        <td width="200px"><img src="{{ grow.most_recent_reading().photo_path }}" /></td>
         <td>
-            <p><a href="{{ url_for('garden', nickname=grow.grower.nickname) }}">{{ grow.grower.nickname }}</a> Started growing {{ grow.variety }}  {{ momentjs(grow.startdate).fromNow() }}:</p>
             <p><strong>{{ grow.title }}</strong></p>
-            <li><a href="{{ url_for('grow', grow_id=grow.id) }}">More details.</a></li>
+            <p><a href="{{ url_for('garden', nickname=grow.grower.nickname) }}">{{ grow.grower.nickname }}</a></p>
+            <p>Planted: {{ momentjs(grow.startdate).fromNow() }}</p>
+            <p> Variety: {{ grow.variety }} </p>
+        </td>
+        <td>
+            <p> Last upload: {{ momentjs(grow.most_recent_reading().timestamp).fromNow() }} </p>
+            <p> Temperature: {{ grow.most_recent_reading().internal_temp }} </p>
+            <p> Humidity: {{ grow.most_recent_reading().internal_humidity }} </p>
+            <p> Fanspeed: {{ grow.most_recent_reading().fanspeed }} </p>
         </td>
     </tr>
 </table>

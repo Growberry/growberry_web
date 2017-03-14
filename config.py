@@ -52,3 +52,6 @@ POSTS_PER_PAGE = 4
 WHOOSH_BASE = os.path.join(basedir, 'search.db')
 
 MAX_SEARCH_RESULTS = 50
+
+# The location where pictures get uploaded to.
+UPLOAD_PIC_PATH = 'app/static/img/growpics/'

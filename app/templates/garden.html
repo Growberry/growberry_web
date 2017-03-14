@@ -15,7 +15,7 @@
 
     </div>
     {% for grow in grows.items %}
-        {% include 'garden_thumb.html' %}
+        <a href="{{ url_for('grow', grow_id=grow.id) }}" style="text-decoration : none; color : #000000;">{% include 'garden_thumb.html' %}</a>
     {% endfor %}
 <ul class="pager">
         {% if grows.has_prev %}

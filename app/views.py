@@ -2,11 +2,11 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required, abort
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 from app import app, db, lm
-from .forms import EditForm, PostForm, SearchForm, CreateGrow, GrowSettings, SettingsForm1
-from .models import User, Post, Grow, Reading
+from .forms import EditForm, PostForm, SearchForm, CreateGrow, GrowSettings, GrowNoteForm
+from .models import User, Post, Grow, Reading, GrowNote
 from .emails import follower_notification
 from datetime import datetime
-from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
+from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS, UPLOAD_PIC_PATH
 from .oauth import OAuthSignIn
 import json
 
@@ -14,6 +14,7 @@ import json
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
 
 @app.before_request
 def before_request():
@@ -24,20 +25,23 @@ def before_request():
         db.session.commit()
         g.search_form = SearchForm()
 
+
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html'), 404
+
 
 @app.errorhandler(500)
 def internal_error(error):
     db.session.rollback()
     return render_template('500.html'), 500
 
+
 @app.route('/', methods = ['GET', 'POST'])
 @app.route('/index', methods = ['GET', 'POST'])
 @app.route('/index/<int:page>', methods = ['GET', 'POST'])
 @login_required
-def index(page = 1):
+def index(page=1):
     form = PostForm()
     if form.validate_on_submit():
         post = Post(body = form.post.data, timestamp = datetime.utcnow(), author = g.user)
@@ -47,9 +51,9 @@ def index(page = 1):
         return redirect(url_for('index'))
     posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
     return render_template('index.html',
-                            title = 'hoe',
-                            form = form,
-                            posts = posts)
+                            title='growberry_web',
+                            form=form,
+                            posts=posts)
 
 
 @app.route('/login')
@@ -79,7 +83,7 @@ def oauth_callback(provider):
     if not user:
         user = User(social_id=social_id, nickname=username, email=email, profile_pic=picture)
         db.session.add(user)
-#make users follow themselves
+        #make users follow themselves
         db.session.add(user.follow(user))
         db.session.commit()
     login_user(user, True)
@@ -102,7 +106,7 @@ def user(nickname, page=1):
     posts = user.posts.order_by(Post.timestamp.desc()).paginate(page, POSTS_PER_PAGE, False)
     return render_template('user.html',
                             user=user,
-                            posts = posts)
+                            posts=posts)
 
 @app.route('/edit', methods=['GET', 'POST'])
 @login_required
@@ -129,20 +133,19 @@ def addgrow():
         active = 0
         if form.is_active.data:
             active = 1
-        grow = Grow(title = form.title.data,
-                    startdate = datetime.utcnow(),
-                    grower = g.user,
-                    thumb =form.thumb.data,
-                    variety = form.variety.data,
-                    settings = form.settings.data,
-                    is_active = active)
+        grow = Grow(title=form.title.data,
+                    startdate=datetime.utcnow(),
+                    grower=g.user,
+                    variety=form.variety.data,
+                    settings=form.settings.data,
+                    is_active=active)
         db.session.add(grow)
         db.session.commit()
         flash('Your Grow has begun!')
-        return redirect(url_for('garden', nickname = g.user.nickname ))
+        return redirect(url_for('garden', nickname=g.user.nickname))
     else:
         flash('Something isnt right.  Try that again.')
-    return render_template('addgrow.html', form =form)
+    return render_template('addgrow.html', form=form)
 
 @app.route('/garden/<nickname>')
 @app.route('/garden/<nickname>/<int:page>')
@@ -152,36 +155,36 @@ def garden(nickname, page =1):
     if user == None:
         flash('User %s not found.' %nickname)
         return redirect(url_for('index'))
-    # most_recent_reading = grow.readings.order_by(Reading.timestamp.desc()).first()
-    # lastpic = '/static/img/growpics/%s/%s/%s.jpg' % (grow.user_id, grow_id, most_recent_reading.id)
     grows = g.user.grows.order_by(Grow.is_active.desc(),Grow.startdate.desc()).paginate(page, POSTS_PER_PAGE,False)
-    return render_template('garden.html', user=user,grows =grows)
+    return render_template('garden.html', user=user,grows=grows)
 
 
 
-@app.route('/grow/<int:grow_id>')
-@app.route('/grow/<int:grow_id>/<int:page>')
+@app.route('/grow/<int:grow_id>', methods = ['GET', 'POST'])
+@app.route('/grow/<int:grow_id>/<int:page>',methods=['GET', 'POST'])
 @login_required
 def grow(grow_id, page =1):
     grow = Grow.query.get(int(grow_id))
+    form = GrowNoteForm()
+    if form.validate_on_submit():
+        grownote = GrowNote(body=form.grownote.data, timestamp=datetime.utcnow(), grow_id=grow.id)
+        db.session.add(grownote)
+        db.session.commit()
+        flash('Your note has been added!')
+        return redirect(url_for('grow', grow_id=grow.id))
     grower = User.query.get(grow.user_id)
-    lastpic = '/static/img/no_picture_yet.jpg'
-    # grow_title = Grow.query.get(int(grow_id)).title
-    # grow_settings = json.loads(Grow.query.get(int(grow_id)).settings)
-    most_recent_reading = grow.readings.order_by(Reading.timestamp.desc()).first()
-    if most_recent_reading:
-        lastpic = '/static/img/growpics/%s/%s/%s.jpg'%(grow.user_id,grow_id,most_recent_reading.id)
     readingspast24 = grow.readings.order_by(Reading.timestamp.desc()).paginate(page, 24, False)
-    # print readingspast24
-    # for reading in readingspast24.items():
-    #     print reading.heatsink_temps
     return render_template('grow.html',
                            title=grow.title,
                            user=g.user,
                            grow=grow,
                            grower=grower,
                            readings=readingspast24,
-                           lastpic=lastpic)
+                           lastpic=grow.most_recent_reading().photo_path,
+                           form=form,
+                           grownotes=grow.notes.order_by(GrowNote.timestamp.desc()).paginate(page, POSTS_PER_PAGE,False)
+                           )
+
 
 @app.route('/end_grow/<int:grow_id>')
 @login_required
@@ -223,61 +226,65 @@ def settings(grow_id):
         return redirect(url_for('garden', nickname=g.user.nickname))
     else:
         flash('Something isnt right.  Try that again.')
-    return render_template('settings.html', form = form, settings = settings)
+    return render_template('settings.html', form=form, settings=settings)
 
 @app.route('/follow/<nickname>')
 @login_required
 def follow(nickname):
-    user = User.query.filter_by(nickname = nickname).first()
+    user = User.query.filter_by(nickname=nickname).first()
     if user is None:
         flash('User %s not found' %nickname)
         return redirect(url_for('index'))
     if user == g.user:
         flash('You cannot follow yourself!')
-        return redirect(url_for('user', nickname = nickname))
+        return redirect(url_for('user', nickname=nickname))
     u = g.user.follow(user)
     if u is None:
         flash('Cannot follow ' + nickname + '.')
-        return redirect(url_for('user', nickname = nickname))
+        return redirect(url_for('user', nickname=nickname))
     db.session.add(u)
     db.session.commit()
     flash('You are now following %s!' %nickname)
     follower_notification(user, g.user)
-    return redirect(url_for('user', nickname = nickname))
+    return redirect(url_for('user', nickname=nickname))
+
 
 @app.route('/unfollow/<nickname>')
 @login_required
 def unfollow(nickname):
-    user = User.query.filter_by(nickname = nickname).first()
+    user = User.query.filter_by(nickname=nickname).first()
     if user is None:
         flash('User %s not found.' % nickname)
         return redirect(url_for('index'))
     if user == g.user:
         flash('You cant unfollow yourself!')
-        return redirect(url_for('user', nickname = nickname))
+        return redirect(url_for('user', nickname=nickname))
     u = g.user.unfollow(user)
     if u is None:
         flash('Cannot unfollow ' + nickname + '.')
-        return redirect(url_for('user', nickname = nickname))
+        return redirect(url_for('user', nickname=nickname))
     db.session.add(u)
     db.session.commit()
     flash ('You are no longer following %s.' %nickname)
-    return redirect(url_for('user', nickname = nickname))
+    return redirect(url_for('user', nickname=nickname))
 
-@app.route('/search', methods = ['POST'])
+
+@app.route('/search', methods=['POST'])
 @login_required
 def search():
     if not g.search_form.validate_on_submit():
         return redirect(url_for('index'))
     return redirect(url_for('search_results', query = g.search_form.search.data))
 
+
 @app.route('/search_results/<query>')
 @login_required
 def search_results(query):
     results = Post.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
     return render_template('search_results.html',
-                            query = query,
-                            results = results)
+                            query=query,
+                            results=results)
+
 
 @app.route('/delete/<int:id>')
 @login_required
@@ -294,7 +301,6 @@ def delete(id):
     flash('Your post has been deleted.')
     return redirect(url_for('index'))
 
-fake_settings = [{'sunrise': '0600', 'daylength': 12, 'set_temp':25}]
 
 @app.route('/get_settings/<grow_id>', methods =['GET'])
 def get_settings(grow_id):
@@ -312,134 +318,22 @@ def get_settings(grow_id):
     return jsonify(settings_dict)
 
 
-@app.route('/autopost/<user_id>', methods =['POST'])
+@app.route('/autopost/<user_id>', methods=['POST'])
 def autopost(user_id):
-    if not request.json or not 'post' in request.json:
+    if not request.json or 'post' not in request.json:
         abort(400)
     user = User.query.get(int(user_id))
     body = request.json['post']
-    post = Post(body = body, timestamp = datetime.utcnow(), author = user)
+    post = Post(body=body, timestamp = datetime.utcnow(), author=user)
     db.session.add(post)
     db.session.commit()
     return jsonify({'body' : str(post.body),'author' : str(user.nickname)}), 201
 
 
-@app.route('/todo/api/v1.0/tasks', methods=['POST'])
-def create_task():
-    if not request.json or not 'title' in request.json:
-        abort(400)
-    task = {
-        'id': 1111,
-        'title': request.json['title'],
-        'description': request.json.get('description', ""),
-        'done': False
-    }
-
-    return jsonify({'task': task}), 201
-
-@app.route('/echo', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
-def api_echo():
-    if request.method == 'GET':
-        return "ECHO: GET\n"
-
-    elif request.method == 'POST':
-        return "ECHO: POST\n"
-
-    elif request.method == 'PATCH':
-        return "ECHO: PACTH\n"
-
-    elif request.method == 'PUT':
-        return "ECHO: PUT\n"
-
-    elif request.method == 'DELETE':
-        return "ECHO: DELETE"
-
-
-@app.route('/reading/<grow_id>', methods =['POST'])
-def reading(grow_id):
-    """
-    Normally you would not have to str() everything,
-    but for some reason sqlite doesn't like anything but string and int
-    """
-    if not request.json:
-        abort(400)
-
-    # will need more robust dynamic error checking
-    stand_in_sensor = {"timestamp": "2016-04-20T04:20:00.000000", "temp": 99.9, "humidity": 99.9}
-    if 'internal' not in request.json['sensors']:
-        request.json['sensors']['internal'] = stand_in_sensor
-    elif 'external' not in request.json['sensors']:
-        request.json['sensors']['external'] = stand_in_sensor
-
-    #
-    # internal_check = request.json['sensors'].get('internal', stand_in_sensor)
-    # external_check = request.json['sensors'].get('external', stand_in_sensor)
-
-    try:
-        max(request.json['sinktemps'])
-    except ValueError:
-        request.json['sinktemps'].append(30.0001)
-
-
-    # internal_temp = ""
-    # internal_humidity = ""
-    # external_temp = ""
-    # external_humidity = ""
-    # if 'internal' in request.json['sensors']:
-    #     internal_temp = str(request.json['sensors']['internal']['temp'])
-    #     internal_humidity = str(request.json['sensors']['internal']['humidity'])
-    # elif ''request.json['sensors']
-    # external_temp = str(request.json['sensors']['external']['temp']),
-    # external_humidity = str(request.json['sensors']['external']['humidity']),
-    # heatsink_temps = '|'.join([str(x) for x in request.json['sinktemps']]),
-    # max_sinktemp = str(max(request.json['sinktemps'])),
-    # pic_dir = request.json['pic_dir'],
-    # grow_id = int(grow_id)
-
-    reading = Reading(timestamp=datetime.strptime(request.json['timestamp'], "%Y-%m-%dT%H:%M:%S.%f"),
-                      lights=request.json['lights'],
-                      fanspeed=str(request.json['fanspeed']),
-                      internal_temp=str(request.json['sensors']['internal']['temp']),
-                      internal_humidity=str(request.json['sensors']['internal']['humidity']),
-                      external_temp=str(request.json['sensors']['external']['temp']),
-                      external_humidity=str(request.json['sensors']['external']['humidity']),
-                      heatsink_temps='|'.join([str(x) for x in request.json['sinktemps']]),
-                      max_sinktemp=str(max(request.json['sinktemps'])),
-                      pic_dir=request.json['pic_dir'],
-                      grow_id=int(grow_id)
-                      )
-    db.session.add(reading)
-    db.session.commit()
-    return str(reading.id), 201
-
-
-# photos = UploadSet('photos', IMAGES)
-#
-# @app.route('/upload', methods=['POST'])
-# def upload():
-#     if request.method == 'POST' and 'photo' in request.files:
-#         filename = photos.save(request.files['photo'])
-#         rec = Photo(filename=filename)
-#         rec.store()
-#         flash("Photo saved.")
-#         return redirect(url_for('show', id=rec.id))
-#     return jsonify({'error': 'you messed up'})
-#
-# @app.route('/photo/<id>')
-# def show(id):
-#     photo = Photo.load(id)
-#     if photo is None:
-#         abort(404)
-#     url = photos.url(photo.filename)
-#     return render_template('show.html', url=url, photo=photo)
-
-# @app.route('/reading/<grow_id>', methods =['POST'])
-# def reading(grow_id):
-
 photos = UploadSet('photos',IMAGES)
-
 app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/img/growpics/'
 configure_uploads(app, photos)
+
 
 @app.route('/multi/<grow_id>', methods =['POST'])
 def multi(grow_id):
@@ -455,9 +349,6 @@ def multi(grow_id):
         except ValueError:
             maxsinktemp = 'NA'
 
-
-        # if len(maxsinktemp) == 0:
-        #     maxsinktemp.append()
         reading = Reading(timestamp=datetime.strptime(submitted_data['timestamp'], "%Y-%m-%dT%H:%M:%S.%f"),
                           lights=submitted_data['lights'],
                           fanspeed=str(submitted_data['fanspeed']),
@@ -467,7 +358,7 @@ def multi(grow_id):
                           external_humidity=str(submitted_sensors.get('external', {'humidity':"NA"})['humidity']),
                           heatsink_temps='|'.join([str(x) for x in submitted_data['sinktemps']]),
                           max_sinktemp=str(maxsinktemp),
-                          pic_dir='/fake/',
+                          photo_path='/static/img/no_photo_assoc.png',
                           grow_id=int(grow_id)
                           )
 
@@ -477,16 +368,14 @@ def multi(grow_id):
 
         if 'photo' in request.files:
             grow = Grow.query.get(int(grow_id))
-            # we can't properly create the pic_dir until we knew the reading_id
-            working_pic_dir = '/static/img/growpics/%s/%s/%s.jpg' % (grow.user_id, grow_id, reading.id)
             photo_name = str(reading.id) + '.jpg'
             photo_loc = str(grow.user_id) + '/' + str(grow_id)
             filename = photos.save(request.files['photo'], folder=photo_loc, name=photo_name)
-            reading.pic_dir = str(filename)
-            results.update({'photo_loc':filename})
+            reading.photo_path = '/static/img/growpics/{}'.format(filename)
+            results.update({'photo_loc': filename})
 
         db.session.commit()
     else:
-        results.update({'error':'No metadata detected in request.'})
+        results.update({'error': 'No metadata detected in request.'})
 
     return jsonify(results), 201

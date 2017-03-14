@@ -22,6 +22,46 @@
             {% endif %}
         {% endif %}
 
+
+<div>
+    <a href="{{ lastpic }}">
+    <img src="{{ lastpic }}" alt="Top Down" style="width:750px;">
+    </a>
+</div>
+<div class="well">
+        <form class="form-horizontal" action="" method="post" name="grownote">
+            {{ form.hidden_tag() }}
+            <div class="control-group{% if form.grownote.errors %} error{% endif %}">
+                <label class="control-label" for="grownote">Add a time-stamped note to this grow:</label>
+                <div class="controls">
+                    {{ form.grownote(cols=64, rows=4, class="span4", maxlength=250) }}
+                    {% for error in form.errors.grownote %}
+                        <span class="help-inline">[{{ error }}]</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input class="btn btn-primary" type="submit" value="Add note!!">
+                </div>
+            </div>
+        </form>
+</div>
+{% for grownote in grownotes.items %}
+        {% include 'grownote.html' %}
+{% endfor %}
+<ul class="pager">
+        {% if grownotes.has_prev %}
+        <li class="previous"><a href="{{ url_for('index', page=grownotes.prev_num) }}">Newer notes</a></li>
+        {% else %}
+        <li class="previous disabled"><a href="#">Newer notes</a></li>
+        {% endif %}
+        {% if grownotes.has_next %}
+        <li class="next"><a href="{{ url_for('index', page=grownotes.next_num) }}">Older notes</a></li>
+        {% else %}
+        <li class="next disabled"><a href="#">Older notes</a></li>
+        {% endif %}
+    </ul>
 <div>
 
         <table style="width:100%">
@@ -48,11 +88,6 @@
                 </tr>
             {% endfor %}
         </table>
-</div>
-<div>
-    <a href="{{ lastpic }}">
-    <img src="{{ lastpic }}" alt="Top Down" style="width:750px;">
-    </a>
 </div>
 {% endblock %}
 

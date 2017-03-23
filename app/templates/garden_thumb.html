@@ -8,7 +8,11 @@
             <p> Variety: {{ grow.variety }} </p>
         </td>
         <td>
-            <p> Last upload: {{ momentjs(grow.most_recent_reading().timestamp).fromNow() }} </p>
+            {% if grow.most_recent_reading() %}
+            <p> Last upload:
+                {{ momentjs(grow.most_recent_reading().timestamp).fromNow() }}
+            </p>
+            {% endif %}
             <p> Temperature: {{ grow.most_recent_reading().internal_temp }} </p>
             <p> Humidity: {{ grow.most_recent_reading().internal_humidity }} </p>
             <p> Fanspeed: {{ grow.most_recent_reading().fanspeed }} </p>

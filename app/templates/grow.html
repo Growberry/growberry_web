@@ -2,6 +2,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <head>
+        <meta charset="utf-8">
+        <title>{{ grow.title }}}}</title>
+        <link rel="stylesheet" href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.css" type="text/css" />
+        <script type="text/javascript" src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.js"></script>
+  </head>
     <h1>{{ grow.title }}</h1>
     <h3>{{ grower.nickname }} started growing {{ grow.variety }} {{ momentjs(grow.startdate).fromNow() }}</h3>
     {% include 'flash.html' %}
@@ -27,6 +33,10 @@
     <a href="{{ lastpic }}">
     <img src="{{ lastpic }}" alt="Top Down" style="width:750px;">
     </a>
+</div>
+<div>
+    {{ div | safe }}
+    {{ script | safe }}
 </div>
 <div class="well">
         <form class="form-horizontal" action="" method="post" name="grownote">

@@ -1,0 +1,202 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <style>
+body {font-family: "Lato", sans-serif;}
+
+/* Style the tab */
+div.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+div.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+div.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+div.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+</style>
+    <meta charset="utf-8">
+    <title>{{ grow.title }}}}</title>
+    <link rel="stylesheet" href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.css" type="text/css" />
+    <script type="text/javascript" src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.js"></script>
+</head>
+<body>
+    <h1>{{ grow.title }}</h1>
+    <h3>{{ grower.nickname }} started growing {{ grow.variety }} {{ momentjs(grow.startdate).fromNow() }}</h3>
+    {% include 'flash.html' %}
+<p>Click on the tabs to see more:</p>
+
+<div class="tab">
+  <button class="tablinks" onclick="openTab(event, 'summary')" id="defaultOpen">Summary</button>
+  <button class="tablinks" onclick="openTab(event, 'graphs')">Graphs</button>
+  <button class="tablinks" onclick="openTab(event, 'notes')">Notes</button>
+  <button class="tablinks" onclick="openTab(event, 'settings')">Settings</button>
+</div>
+
+<div id="summary" class="tabcontent">
+    <a href="{{ grow.most_recent_reading().photo_path }}">
+    <img src="{{ grow.most_recent_reading().photo_path }}" alt="Top Down" style="width:750px;">
+    </a>
+    <table style="width:100%">
+            <tr>
+                <th> Time </th>
+                <th>Lights</th>
+                <th>Fanspeed</th>
+                <th>Heatsink temp</th>
+                <th>internal temp</th>
+                <th>internal humidity</th>
+                <th>external temp </th>
+                <th>external humidity </th>
+            </tr>
+            {% for reading in readings.items %}
+                <tr>
+                    <th> {{ momentjs(reading.timestamp).format("YYYY-MM-DD HH:mm") }}</th>
+                    <th> {{ reading.lights }} </th>
+                    <th> {{ reading.fanspeed }} </th>
+                    <th> {{ reading.max_sinktemp }} </th>
+                    <th> {{ reading.internal_temp }} C</th>
+                    <th> {{ reading.internal_humidity }}%</th>
+                    <th> {{ reading.external_temp }} C</th>
+                    <th> {{ reading.external_humidity }}%</th>
+                </tr>
+            {% endfor %}
+        </table>
+</div>
+
+<div id="graphs" class="tabcontent">
+    <link rel="stylesheet" href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.css" type="text/css" />
+    <script type="text/javascript" src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.js"></script>
+    {{ div | safe }}
+    {{ script | safe }}
+</div>
+
+<div id="notes" class="tabcontent">
+<form class="form-horizontal" action="" method="post" name="grownote">
+            {{ form.hidden_tag() }}
+            <div class="control-group{% if form.grownote.errors %} error{% endif %}">
+                <label class="control-label" for="grownote">Add a time-stamped note to this grow:</label>
+                <div class="controls">
+                    {{ form.grownote(cols=64, rows=4, class="span4", maxlength=250) }}
+                    {% for error in form.errors.grownote %}
+                        <span class="help-inline">[{{ error }}]</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input class="btn btn-primary" type="submit" value="Add note!!">
+                </div>
+            </div>
+        </form>
+    <div>
+        {% for grownote in grownotes.items %}
+        {% include 'grownote.html' %}
+        {% endfor %}
+<ul class="pager">
+        {% if grownotes.has_prev %}
+        <li class="previous"><a href="{{ url_for('index', page=grownotes.prev_num) }}">Newer notes</a></li>
+        {% else %}
+        <li class="previous disabled"><a href="#">Newer notes</a></li>
+        {% endif %}
+        {% if grownotes.has_next %}
+        <li class="next"><a href="{{ url_for('index', page=grownotes.next_num) }}">Older notes</a></li>
+        {% else %}
+        <li class="next disabled"><a href="#">Older notes</a></li>
+        {% endif %}
+    </ul></div>
+</div>
+
+<div id = "settings" class="tabcontent">
+         <h1>Adjust settings of your grow.</h1>
+            {% if grow.user_id == g.user.id %}
+                {% if grow.is_active %}
+    <div class="well">
+        <form class="form-horizontal" action="" method="post" name="edit">
+            {{ settingsform.hidden_tag() }}
+            <div class="control-group{% if settingsform.sunrise.errors %} error{% endif %}">
+                <label class="control-label" for="sunrise">Time the lights turn on each day? (format: HHMM -24hr)</label>
+                <div class="controls">
+                    {{ settingsform.sunrise(cols=100, rows=1, class="span4") }}
+                    {% for error in settingsform.sunrise.errors %}
+                        <span class="help-inline">[{{ error }}]</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="control-group{% if settingsform.daylength.errors %} error{% endif %}">
+                <label class="control-label" for="daylength">Set the hours of light. (0-24)</label>
+                <div class="controls">
+                    {{ settingsform.daylength(cols=24, rows=1, class="span4", default=settings['daylength']) }}
+                    {% for error in settingsform.daylength.errors %}
+                        <span class="help-inline">[{{ error }}]</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="control-group{% if settingsform.settemp.errors %} error{% endif %}">
+                <label class="control-label" for="settemp">Enter the desired temperature. (degrees C)</label>
+                <div class="controls">
+                    {{ settingsform.settemp(cols=64, rows=4, class="span4", default=settings['settemp']) }}
+                    {% for error in settingsform.settemp.errors %}
+                        <span class="help-inline">[{{ error }}]</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input class="btn btn-primary" type="submit" value="Update settings">
+                </div>
+            </div>
+        </form>
+</div>
+                {% endif %}
+            {% endif %}
+<script>
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+// get the element with id='defaultOpen' and display it by clicking on page load:
+document.getElementById("defaultOpen").click();
+</script>
+
+</body>
+
+
+{% endblock %}

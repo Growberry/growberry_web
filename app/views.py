@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, jsonify
 from flask_login import login_user, logout_user, current_user, login_required, abort
 from flask_uploads import UploadSet, IMAGES, configure_uploads
-from app import app, db, lm
+from app import app, db, lm, models
 from .forms import EditForm, PostForm, SearchForm, CreateGrow, GrowSettings, GrowNoteForm
 from .models import User, Post, Grow, Reading, GrowNote
 from .emails import follower_notification
@@ -9,6 +9,10 @@ from datetime import datetime
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS, UPLOAD_PIC_PATH
 from .oauth import OAuthSignIn
 import json
+import pandas as pd
+from bokeh.plotting import figure
+from bokeh.embed import components
+
 
 
 @lm.user_loader
@@ -125,6 +129,7 @@ def edit():
         form.about_me.data = g.user.about_me
     return render_template('edit.html', form =form)
 
+
 @app.route('/addgrow', methods=['GET', 'POST'])
 @login_required
 def addgrow():
@@ -139,6 +144,8 @@ def addgrow():
                     variety=form.variety.data,
                     settings=form.settings.data,
                     is_active=active)
+        # add default settings - temporary fix until I change the CreateGrow form.
+        grow.settings = json.dumps({'sunrise': '0420', 'daylength': 18, 'settemp': '25'})
         db.session.add(grow)
         db.session.commit()
         flash('Your Grow has begun!')
@@ -146,6 +153,7 @@ def addgrow():
     else:
         flash('Something isnt right.  Try that again.')
     return render_template('addgrow.html', form=form)
+
 
 @app.route('/garden/<nickname>')
 @app.route('/garden/<nickname>/<int:page>')
@@ -159,12 +167,33 @@ def garden(nickname, page =1):
     return render_template('garden.html', user=user,grows=grows)
 
 
-
 @app.route('/grow/<int:grow_id>', methods = ['GET', 'POST'])
 @app.route('/grow/<int:grow_id>/<int:page>',methods=['GET', 'POST'])
 @login_required
 def grow(grow_id, page =1):
     grow = Grow.query.get(int(grow_id))
+    try:
+        settings = json.loads(grow.settings)
+    except:  #new grows don't require entering settings ATM, a default is injected here to prevent errors.
+        settings = {'sunrise': '0420', 'daylength': 18, 'settemp': '25'}
+
+    growsettings = Settings(settings)
+    settingsform = GrowSettings(obj=growsettings)
+    if settingsform.validate_on_submit():
+        settingsform.populate_obj(growsettings)
+        settings['sunrise'] = settingsform.sunrise.data
+        settings['daylength'] = settingsform.daylength.data
+        settings['settemp'] = settingsform.settemp.data
+        grow.settings = json.dumps(settings)
+        db.session.add(grow)
+        db.session.commit()
+        flash('Settings have been updated')
+        return redirect(url_for('grow', grow_id=grow.id))
+
+    else:
+        flash('why does this show up!!!?')
+
+
     form = GrowNoteForm()
     if form.validate_on_submit():
         grownote = GrowNote(body=form.grownote.data, timestamp=datetime.utcnow(), grow_id=grow.id)
@@ -174,15 +203,35 @@ def grow(grow_id, page =1):
         return redirect(url_for('grow', grow_id=grow.id))
     grower = User.query.get(grow.user_id)
     readingspast24 = grow.readings.order_by(Reading.timestamp.desc()).paginate(page, 24, False)
-    return render_template('grow.html',
+    ######################################
+   #"""Should this chunk become a function call?  That way it can be updated elsewhere and swapped new functions"""
+    readings_data = db.session.query(models.Reading).filter(models.Reading.grow_id == str(grow_id)).statement
+    df = pd.read_sql(readings_data, db.engine, parse_dates='timestamp')
+    colormap = {0: 'red', 1: 'blue'}
+    timestamp = df['timestamp']
+    lights = df['lights']
+    internal_temp = df['internal_temp']
+    colors = [colormap[x] for x in lights]
+    xaxis = timestamp
+    yaxis = internal_temp
+    title = '{} vs. {}'.format(xaxis.name, yaxis.name)
+    p = figure(width=800, height=350, x_axis_type="datetime", title=title)
+    p.circle(timestamp, internal_temp, color=colors)
+    script, div = components(p)
+    ######################################
+    return render_template('grow3.html',
                            title=grow.title,
                            user=g.user,
                            grow=grow,
                            grower=grower,
                            readings=readingspast24,
-                           lastpic=grow.most_recent_reading().photo_path,
+                           # lastpic=grow.most_recent_reading().photo_path,
                            form=form,
-                           grownotes=grow.notes.order_by(GrowNote.timestamp.desc()).paginate(page, POSTS_PER_PAGE,False)
+                           grownotes=grow.notes.order_by(GrowNote.timestamp.desc()).paginate(page, POSTS_PER_PAGE,False),
+                           script=script,
+                           div=div,
+                           settings=settings,
+                           settingsform=settingsform
                            )
 
 
@@ -206,7 +255,6 @@ class Settings(object):
 @login_required
 def settings(grow_id):
     grow = Grow.query.get(int(grow_id))
-    print grow.settings
     try:
         settings = json.loads(grow.settings)
     except:
@@ -304,9 +352,7 @@ def delete(id):
 
 @app.route('/get_settings/<grow_id>', methods =['GET'])
 def get_settings(grow_id):
-    """returns the settings for the specified grow - need to change this to the specified barrel.
-    will need to find all grows with barrel_id to the one in the URL, sort them by is_active. Will also need to add a barrel
-    table in the database, and an foreign key for barrel_id in each grow."""
+    """returns the settings for the specified grow - in json format"""
     grow = Grow.query.get(int(grow_id))
     sttgs = grow.settings
     settings_dict = json.loads(sttgs)
@@ -318,25 +364,21 @@ def get_settings(grow_id):
     return jsonify(settings_dict)
 
 
-@app.route('/autopost/<user_id>', methods=['POST'])
-def autopost(user_id):
-    if not request.json or 'post' not in request.json:
-        abort(400)
-    user = User.query.get(int(user_id))
-    body = request.json['post']
-    post = Post(body=body, timestamp = datetime.utcnow(), author=user)
-    db.session.add(post)
-    db.session.commit()
-    return jsonify({'body' : str(post.body),'author' : str(user.nickname)}), 201
-
-
 photos = UploadSet('photos',IMAGES)
 app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/img/growpics/'
 configure_uploads(app, photos)
 
 
-@app.route('/multi/<grow_id>', methods =['POST'])
+@app.route('/multi/<grow_id>', methods=['POST'])
 def multi(grow_id):
+    """
+    Location to deposit data.  Will need some sort of authentication if the server is ever run publically.
+    @param grow_id: This will be assigned on the local level, so each 'node' knows what settings belong to it,
+    and what place to send data to
+    @return: json/dictionary including the id of the new row in the Readings table.
+    And picture directory (if picture was included in the upload)
+    dictionary will contain an entry with key: "error" if an error was encountered.
+    """
     results = {}
     print request.files
     if 'metadata' in request.files:
@@ -361,7 +403,7 @@ def multi(grow_id):
                           photo_path='/static/img/no_photo_assoc.png',
                           grow_id=int(grow_id)
                           )
-
+        # must commit the reading data to get the reading id (used to define the picture path)
         db.session.add(reading)
         db.session.commit()
         results.update({'reading_id': reading.id})
@@ -379,3 +421,6 @@ def multi(grow_id):
         results.update({'error': 'No metadata detected in request.'})
 
     return jsonify(results), 201
+
+
+

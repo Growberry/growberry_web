@@ -206,7 +206,8 @@ def grow(grow_id, page =1):
     ######################################
    #"""Should this chunk become a function call?  That way it can be updated elsewhere and swapped new functions"""
     readings_data = db.session.query(models.Reading).filter(models.Reading.grow_id == str(grow_id)).statement
-    df = pd.read_sql(readings_data, db.engine, parse_dates='timestamp')
+    df = pd.read_sql(readings_data, db.engine, ) # python3
+    # df = pd.read_sql(readings_data, db.engine, parse_dates='timestamp') # this line works for python2, not python3
     colormap = {0: 'red', 1: 'blue'}
     timestamp = df['timestamp']
     lights = df['lights']
@@ -380,7 +381,6 @@ def multi(grow_id):
     dictionary will contain an entry with key: "error" if an error was encountered.
     """
     results = {}
-    print request.files
     if 'metadata' in request.files:
         subjson = request.files['metadata'].read()
         submitted_data = json.loads(subjson)

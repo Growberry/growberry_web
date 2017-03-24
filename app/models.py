@@ -84,10 +84,10 @@ class User(db.Model):
     def avatar(self,size):
         if self.profile_pic:
             return self.profile_pic
-        try:
-            return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' % (md5(self.email.encode('utf-8')).hexdigest(), size)
-        except:
-            return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' % (md5('default_avatar@google.com').hexdigest(), size)
+        # try:
+        #     return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' % (md5(self.email.encode('utf-8')).hexdigest(), size)
+        # except:
+        #     return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' % (md5('default_avatar@google.com').hexdigest(), size)
 
     def __repr__(self):
         return '<Usr %r>' % (self.nickname)

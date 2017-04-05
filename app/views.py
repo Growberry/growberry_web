@@ -4,7 +4,6 @@ from flask_uploads import UploadSet, IMAGES, configure_uploads
 from app import app, db, lm, models
 from .forms import EditForm, PostForm, SearchForm, CreateGrow, GrowSettings, GrowNoteForm
 from .models import User, Post, Grow, Reading, GrowNote
-from .emails import follower_notification
 from datetime import datetime
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS, UPLOAD_PIC_PATH
 from .oauth import OAuthSignIn
@@ -12,7 +11,6 @@ import json
 import pandas as pd
 from bokeh.plotting import figure
 from bokeh.embed import components
-
 
 
 @lm.user_loader
@@ -40,30 +38,39 @@ def internal_error(error):
     db.session.rollback()
     return render_template('500.html'), 500
 
-
-@app.route('/', methods = ['GET', 'POST'])
-@app.route('/index', methods = ['GET', 'POST'])
-@app.route('/index/<int:page>', methods = ['GET', 'POST'])
+@app.route('/')
+@app.route('/index/')
+@app.route('/garden/')
+@app.route('/garden/<nickname>/<int:page>')
 @login_required
-def index(page=1):
-    form = PostForm()
-    if form.validate_on_submit():
-        post = Post(body = form.post.data, timestamp = datetime.utcnow(), author = g.user)
-        db.session.add(post)
-        db.session.commit()
-        flash('Your post is now live!')
-        return redirect(url_for('index'))
-    posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
-    return render_template('index.html',
-                            title='growberry_web',
-                            form=form,
-                            posts=posts)
+def index(page =1):
+    user = g.user
+    grows = g.user.grows.order_by(Grow.is_active.desc(),Grow.startdate.desc()).paginate(page, POSTS_PER_PAGE,False)
+    return render_template('garden.html', user=user,grows=grows)
+
+#
+# @app.route('/', methods=['GET', 'POST'])
+# @app.route('/index', methods = ['GET', 'POST'])
+# @app.route('/index/<int:page>', methods = ['GET', 'POST'])
+# @login_required
+# def index(page=1):
+#     form = PostForm()
+#     if form.validate_on_submit():
+#         post = Post(body = form.post.data, timestamp = datetime.utcnow(), author = g.user)
+#         db.session.add(post)
+#         db.session.commit()
+#         flash('Your post is now live!')
+#         return redirect(url_for('index'))
+#     posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
+#     return render_template('index.html',
+#                             title='growberry_web',
+#                             form=form,
+#                             posts=posts)
 
 
 @app.route('/login')
 def login():
     return render_template('login.html')
-
 
 
 @app.route('/authorize/<provider>')
@@ -97,7 +104,7 @@ def oauth_callback(provider):
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
 @app.route('/user/<nickname>')
 @app.route('/user/<nickname>/<int:page>')
@@ -149,22 +156,10 @@ def addgrow():
         db.session.add(grow)
         db.session.commit()
         flash('Your Grow has begun!')
-        return redirect(url_for('garden', nickname=g.user.nickname))
+        return redirect(url_for('index'))
     else:
         flash('Something isnt right.  Try that again.')
     return render_template('addgrow.html', form=form)
-
-
-@app.route('/garden/<nickname>')
-@app.route('/garden/<nickname>/<int:page>')
-@login_required
-def garden(nickname, page =1):
-    user = User.query.filter_by(nickname=nickname).first()
-    if user == None:
-        flash('User %s not found.' %nickname)
-        return redirect(url_for('index'))
-    grows = g.user.grows.order_by(Grow.is_active.desc(),Grow.startdate.desc()).paginate(page, POSTS_PER_PAGE,False)
-    return render_template('garden.html', user=user,grows=grows)
 
 
 @app.route('/grow/<int:grow_id>', methods = ['GET', 'POST'])
@@ -172,6 +167,9 @@ def garden(nickname, page =1):
 @login_required
 def grow(grow_id, page =1):
     grow = Grow.query.get(int(grow_id))
+    grower = User.query.get(grow.user_id)
+    readingspast24 = grow.readings.order_by(Reading.timestamp.desc()).paginate(page, 24, False)
+
     try:
         settings = json.loads(grow.settings)
     except:  #new grows don't require entering settings ATM, a default is injected here to prevent errors.
@@ -190,10 +188,6 @@ def grow(grow_id, page =1):
         flash('Settings have been updated')
         return redirect(url_for('grow', grow_id=grow.id))
 
-    else:
-        flash('why does this show up!!!?')
-
-
     form = GrowNoteForm()
     if form.validate_on_submit():
         grownote = GrowNote(body=form.grownote.data, timestamp=datetime.utcnow(), grow_id=grow.id)
@@ -201,8 +195,7 @@ def grow(grow_id, page =1):
         db.session.commit()
         flash('Your note has been added!')
         return redirect(url_for('grow', grow_id=grow.id))
-    grower = User.query.get(grow.user_id)
-    readingspast24 = grow.readings.order_by(Reading.timestamp.desc()).paginate(page, 24, False)
+
     ######################################
    #"""Should this chunk become a function call?  That way it can be updated elsewhere and swapped new functions"""
     readings_data = db.session.query(models.Reading).filter(models.Reading.grow_id == str(grow_id)).statement
@@ -226,7 +219,6 @@ def grow(grow_id, page =1):
                            grow=grow,
                            grower=grower,
                            readings=readingspast24,
-                           # lastpic=grow.most_recent_reading().photo_path,
                            form=form,
                            grownotes=grow.notes.order_by(GrowNote.timestamp.desc()).paginate(page, POSTS_PER_PAGE,False),
                            script=script,
@@ -252,102 +244,21 @@ class Settings(object):
         self.daylength = settingsdict['daylength']
         self.settemp = settingsdict['settemp']
 
-@app.route('/settings/<int:grow_id>',methods=['GET', 'POST'])
-@login_required
-def settings(grow_id):
-    grow = Grow.query.get(int(grow_id))
-    try:
-        settings = json.loads(grow.settings)
-    except:
-        settings = {'sunrise': '0420', 'daylength':18, 'settemp':'25'}
-
-    growsettings = Settings(settings)
-    form = GrowSettings(obj=growsettings)
-    if form.validate_on_submit():
-        form.populate_obj(growsettings)
-        settings['sunrise'] = form.sunrise.data
-        settings['daylength'] = form.daylength.data
-        settings['settemp'] = form.settemp.data
-        grow.settings = json.dumps(settings)
-        db.session.add(grow)
-        db.session.commit()
-        flash('Settings have been updated')
-        return redirect(url_for('garden', nickname=g.user.nickname))
-    else:
-        flash('Something isnt right.  Try that again.')
-    return render_template('settings.html', form=form, settings=settings)
-
-@app.route('/follow/<nickname>')
-@login_required
-def follow(nickname):
-    user = User.query.filter_by(nickname=nickname).first()
-    if user is None:
-        flash('User %s not found' %nickname)
-        return redirect(url_for('index'))
-    if user == g.user:
-        flash('You cannot follow yourself!')
-        return redirect(url_for('user', nickname=nickname))
-    u = g.user.follow(user)
-    if u is None:
-        flash('Cannot follow ' + nickname + '.')
-        return redirect(url_for('user', nickname=nickname))
-    db.session.add(u)
-    db.session.commit()
-    flash('You are now following %s!' %nickname)
-    follower_notification(user, g.user)
-    return redirect(url_for('user', nickname=nickname))
-
-
-@app.route('/unfollow/<nickname>')
-@login_required
-def unfollow(nickname):
-    user = User.query.filter_by(nickname=nickname).first()
-    if user is None:
-        flash('User %s not found.' % nickname)
-        return redirect(url_for('index'))
-    if user == g.user:
-        flash('You cant unfollow yourself!')
-        return redirect(url_for('user', nickname=nickname))
-    u = g.user.unfollow(user)
-    if u is None:
-        flash('Cannot unfollow ' + nickname + '.')
-        return redirect(url_for('user', nickname=nickname))
-    db.session.add(u)
-    db.session.commit()
-    flash ('You are no longer following %s.' %nickname)
-    return redirect(url_for('user', nickname=nickname))
-
-
-@app.route('/search', methods=['POST'])
-@login_required
-def search():
-    if not g.search_form.validate_on_submit():
-        return redirect(url_for('index'))
-    return redirect(url_for('search_results', query = g.search_form.search.data))
-
-
-@app.route('/search_results/<query>')
-@login_required
-def search_results(query):
-    results = Post.query.whoosh_search(query, MAX_SEARCH_RESULTS).all()
-    return render_template('search_results.html',
-                            query=query,
-                            results=results)
 
 
 @app.route('/delete/<int:id>')
 @login_required
 def delete(id):
-    post = Post.query.get(id)
-    if post == None:
-        flash('Post not found.')
+    grownote = GrowNote.query.get(id)
+    if grownote == None:
+        flash('Note not found.')
         return redirect(url_for('index'))
-    if post.author.id != g.user.id:
+    if grownote.author.id != g.user.id:
         flash('You can not delete a post by another user.')
         return redirect(url_for('index'))
-    db.session.delete(post)
+    db.session.delete(grownote)
     db.session.commit()
-    flash('Your post has been deleted.')
+    flash('Your note has been deleted.')
     return redirect(url_for('index'))
 
 

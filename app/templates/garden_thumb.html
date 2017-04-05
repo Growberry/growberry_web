@@ -3,7 +3,7 @@
         <td width="200px"><img src="{{ grow.most_recent_reading().photo_path }}" /></td>
         <td>
             <p><strong>{{ grow.title }}</strong></p>
-            <p><a href="{{ url_for('garden', nickname=grow.grower.nickname) }}">{{ grow.grower.nickname }}</a></p>
+            <p><a href="{{ url_for('index') }}">{{ grow.grower.nickname }}</a></p>
             <p>Planted: {{ momentjs(grow.startdate).fromNow() }}</p>
             <p> Variety: {{ grow.variety }} </p>
         </td>
@@ -16,6 +16,15 @@
             <p> Temperature: {{ grow.most_recent_reading().internal_temp }} </p>
             <p> Humidity: {{ grow.most_recent_reading().internal_humidity }} </p>
             <p> Fanspeed: {{ grow.most_recent_reading().fanspeed }} </p>
+            <div>
+                {% if grow.user_id == g.user.id %}
+                {% if grow.is_active %}
+                <form action="{{url_for('end_grow', grow_id=grow.id)}}"onclick="return confirm('Are you sure you want to end the grow? (this cannot be undone.)');">
+                    <input type="submit" value="End grow." />
+                </form>
+                {% endif %}
+                {% endif %}
+            </div>
         </td>
     </tr>
 </table>

@@ -52,7 +52,16 @@ div.tab button.active {
     <h1>{{ grow.title }}</h1>
     <h3>{{ grower.nickname }} started growing {{ grow.variety }} {{ momentjs(grow.startdate).fromNow() }}</h3>
     {% include 'flash.html' %}
-<p>Click on the tabs to see more:</p>
+
+<div>
+    {% if grow.user_id == g.user.id %}
+    {% if grow.is_active %}
+    <form action="{{url_for('end_grow', grow_id=grow.id)}}"onclick="return confirm('Are you sure you want to end the grow? (this cannot be undone.)');">
+        <input type="submit" value="End grow." />
+    </form>
+    {% endif %}
+    {% endif %}
+</div>
 
 <div class="tab">
   <button class="tablinks" onclick="openTab(event, 'summary')" id="defaultOpen">Summary</button>

@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, jsonify
-from flask_login import login_user, logout_user, current_user, login_required, abort
+from flask_login import login_user, logout_user, current_user, login_required
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 from app import app, db, lm, models
 from .forms import EditForm, PostForm, SearchForm, CreateGrow, GrowSettings, GrowNoteForm
@@ -293,7 +293,7 @@ def multi(grow_id):
     """
     results = {}
     if 'metadata' in request.files:
-        subjson = request.files['metadata'].read()
+        subjson = request.files['metadata'].read().decode()
         submitted_data = json.loads(subjson)
         submitted_sensors = submitted_data['sensors']
         maxsinktemp = None
